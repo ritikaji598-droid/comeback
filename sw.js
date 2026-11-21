@@ -1,5 +1,5 @@
 // Comeback app shell: logo aur splash offline bhi dikhe. Asli data Google se aata hai.
-const CACHE = 'comeback-shell-v1';
+const CACHE = 'comeback-shell-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

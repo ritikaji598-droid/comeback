@@ -7,42 +7,138 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Comeback">
+<meta name="description" content="Comeback Coach: aapka personal AI fitness coach. Workout, diet, progress aur reminders, sab ek app me.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;500;600;700&family=Roboto:wght@500&display=swap" rel="stylesheet">
 <title>Comeback</title>
 <style>
-  html,body{margin:0;height:100%;background:#0a0a0a;color:#f5f5f4;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
-  #app{position:fixed;inset:0;width:100%;height:100%;border:0;background:#0a0a0a}
-  #splash{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0a0a0a;transition:opacity .4s ease}
-  #splash.gone{opacity:0;pointer-events:none}
-  .logo{width:88px;height:88px;border-radius:24px;background:#d4ff00;display:grid;place-items:center;animation:b 1.3s ease-in-out infinite}
+  :root{--bg:#0a0a0a;--card:#141414;--line:rgba(255,255,255,.1);--text:#f5f5f4;--muted:#a3a3a3;--volt:#d4ff00}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  #app{position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--bg);visibility:hidden}
+  #app.on{visibility:visible}
+  .layer{position:fixed;inset:0;z-index:5;background:var(--bg);transition:opacity .45s ease,visibility .45s}
+  .layer.gone{opacity:0;visibility:hidden;pointer-events:none}
+  /* splash */
+  #splash{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+  .logo{width:88px;height:88px;border-radius:24px;background:var(--volt);display:grid;place-items:center}
   .logo svg{width:48px;height:48px}
+  #splash .logo{animation:b 1.3s ease-in-out infinite}
   @keyframes b{50%{transform:scale(1.06);box-shadow:0 0 0 14px rgba(212,255,0,.12)}}
-  #splash b{font:800 34px/1 "Arial Narrow",system-ui,sans-serif;letter-spacing:.04em;margin-top:10px}
-  #splash small{font-size:12px;color:#a3a3a3;letter-spacing:.2em;text-transform:uppercase}
-  #help{display:none;max-width:300px;text-align:center;font-size:14px;color:#d4d4d4;line-height:1.5;margin-top:18px}
-  #help a{display:inline-block;margin-top:10px;background:#d4ff00;color:#0a0a0a;font-weight:800;text-decoration:none;padding:12px 18px;border-radius:10px}
+  #splash b{font:800 38px/1 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.03em;margin-top:12px}
+  #splash small{font-size:11px;color:var(--muted);letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+  /* login */
+  #login{overflow-y:auto;display:flex;flex-direction:column}
+  #login:before{content:"";position:absolute;right:-90px;top:-70px;width:340px;height:340px;background:repeating-linear-gradient(135deg,rgba(212,255,0,.12) 0 12px,transparent 12px 28px);transform:rotate(8deg);border-radius:40px;pointer-events:none}
+  .lg-in{position:relative;flex:1;display:flex;flex-direction:column;justify-content:space-between;max-width:460px;width:100%;margin:0 auto;padding:calc(28px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom))}
+  .lg-top .logo{width:64px;height:64px;border-radius:18px}
+  .lg-top .logo svg{width:34px;height:34px}
+  .kicker{margin-top:28px;font:700 13px/1 "Barlow Condensed",sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--volt)}
+  h1{margin:10px 0 0;font:800 min(76px,16.5vw)/.88 "Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:-.005em}
+  h1 span{color:var(--volt)}
+  .sub{margin:16px 0 0;color:var(--muted);font-size:15px;line-height:1.55;max-width:360px}
+  .feats{list-style:none;padding:0;margin:26px 0 0;display:flex;flex-direction:column;gap:12px}
+  .feats li{display:flex;align-items:center;gap:12px;font-size:14.5px;font-weight:600}
+  .feats i{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:17px;flex:0 0 auto}
+  .lg-bottom{margin-top:34px}
+  /* Google sign-in button (Google branding: white, G logo, Roboto 500) */
+  .gbtn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;height:54px;border-radius:28px;border:1px solid #dadce0;background:#fff;color:#1f1f1f;font:500 16px/1 Roboto,Arial,sans-serif;letter-spacing:.25px;cursor:pointer;transition:background .15s,box-shadow .15s}
+  .gbtn:hover{background:#f8faff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+  .gbtn:active{background:#eef1f6}
+  .gbtn svg{width:22px;height:22px}
+  .fine{margin:14px 0 0;font-size:12px;color:#8a8a8a;text-align:center;line-height:1.5}
+  .fine b{color:#cfcfcf}
+  .help{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+  .help summary{cursor:pointer;padding:12px 14px;font-size:13px;font-weight:600;color:#d4d4d4;list-style:none}
+  .help summary::-webkit-details-marker{display:none}
+  .help ol{margin:0;padding:0 16px 14px 32px;font-size:13px;color:var(--muted);line-height:1.6}
+  .msg{display:none;margin:0 0 14px;padding:10px 12px;border-radius:12px;background:rgba(212,255,0,.1);border:1px solid rgba(212,255,0,.4);font-size:13px;color:#e8e8e8}
+  @media (max-height:700px){h1{font-size:min(62px,15vw)}.feats{margin-top:18px;gap:8px}.kicker{margin-top:18px}}
 </style>
 </head>
 <body>
-<iframe id="app" title="Comeback Coach"
-  src="https://script.google.com/macros/s/AKfycbz0ry_gBq9-Hd9r2l1HdaMZcLaYJY6ntzGL0n7xwNHXXrb3KbaW7o_bBu92tAmEH1-tsg/exec"
-  allow="clipboard-read; clipboard-write; camera; microphone; fullscreen"></iframe>
-<div id="splash">
+<iframe id="app" title="Comeback Coach" allow="clipboard-read; clipboard-write; camera; microphone; fullscreen"></iframe>
+
+<div id="splash" class="layer gone">
   <div class="logo"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="#0a0a0a"/></svg></div>
   <b>COMEBACK</b>
-  <small>Loading your comeback…</small>
-  <div id="help">
-    App load nahi ho raha? Shayad Google me login chahiye.<br>
-    <a href="https://script.google.com/macros/s/AKfycbz0ry_gBq9-Hd9r2l1HdaMZcLaYJY6ntzGL0n7xwNHXXrb3KbaW7o_bBu92tAmEH1-tsg/exec" target="_blank" rel="noopener">Yahan tap karke login karo</a><br>
-    <span style="font-size:12px;color:#8a8a8a">Login ke baad ye app band karke dobara kholo.</span>
+  <small id="spMsg">Loading your comeback…</small>
+</div>
+
+<div id="login" class="layer">
+  <div class="lg-in">
+    <div class="lg-top">
+      <div class="logo"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="#0a0a0a"/></svg></div>
+      <div class="kicker">AI fitness coach</div>
+      <h1>Your<br><span>Comeback</span><br>starts now</h1>
+      <p class="sub">Workout, diet, progress aur reminders, sab ek jagah. Aapka personal coach jo har din aapke saath hai.</p>
+      <ul class="feats">
+        <li><i>🤖</i>AI coach jo chat me bolte hi sab log kar de</li>
+        <li><i>🏋️</i>Smart workout mode, PR tracker aur rest timer</li>
+        <li><i>📈</i>Progress, photos aur weekly report</li>
+      </ul>
+    </div>
+    <div class="lg-bottom">
+      <div class="msg" id="lgMsg"></div>
+      <button class="gbtn" id="gbtn" type="button">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <p class="fine">Aapka data sirf <b>aapke apne Google account</b> me save hota hai.<br>Koi aur use nahi dekh sakta.</p>
+      <details class="help">
+        <summary>Pehli baar login? (1 minute ka setup)</summary>
+        <ol>
+          <li>"Continue with Google" dabao aur apna Gmail chuno.</li>
+          <li>"Google hasn't verified this app" aaye to <b>Advanced → Go to Comeback Coach</b> dabao.</li>
+          <li><b>Select all</b> tick karke <b>Allow</b> dabao.</li>
+          <li>App khul jaye to wapas yahan aao, ya ye app dobara kholo.</li>
+        </ol>
+      </details>
+    </div>
   </div>
 </div>
+
 <script>
-  var f=document.getElementById('app'), s=document.getElementById('splash');
-  f.addEventListener('load',function(){ setTimeout(function(){ s.classList.add('gone'); },600); });
-  setTimeout(function(){ if(!s.classList.contains('gone')) document.getElementById('help').style.display='block'; },12000);
+  var EXEC = 'https://script.google.com/macros/s/AKfycbz0ry_gBq9-Hd9r2l1HdaMZcLaYJY6ntzGL0n7xwNHXXrb3KbaW7o_bBu92tAmEH1-tsg/exec';
+  var app = document.getElementById('app'), splash = document.getElementById('splash'), login = document.getElementById('login');
+  var ready = false, waitT = null;
+  function store(k, v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
+  function get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function show(el){ el.classList.remove('gone'); }
+  function hide(el){ el.classList.add('gone'); }
+  function showLogin(msg){
+    ready = false; clearTimeout(waitT); app.classList.remove('on'); hide(splash); show(login);
+    var m = document.getElementById('lgMsg'); if(msg){ m.textContent = msg; m.style.display = 'block'; } else m.style.display = 'none';
+  }
+  function startApp(){
+    hide(login); show(splash); document.getElementById('spMsg').textContent = 'Loading your comeback…';
+    app.classList.remove('on'); app.src = EXEC + '?pwa=1&t=' + Date.now();
+    clearTimeout(waitT);
+    waitT = setTimeout(function(){ if(!ready) showLogin('Login complete nahi hua. "Continue with Google" dabake login karo, phir yahan wapas aao.'); }, 20000);
+  }
+  window.addEventListener('message', function(e){
+    var d = e.data || {};
+    if(d.cc === 'ready'){
+      ready = true; clearTimeout(waitT); store('cc_auth', '1');
+      app.classList.add('on'); hide(login); setTimeout(function(){ hide(splash); }, 300);
+    }
+    if(d.cc === 'logout'){ store('cc_auth', null); showLogin('Doosre account se login karne ke liye neeche button dabao.'); }
+  });
+  document.getElementById('gbtn').addEventListener('click', function(){
+    store('cc_auth', '1');
+    var w = null; try{ w = window.open(EXEC, '_blank'); }catch(e){}
+    if(!w){ location.href = EXEC; return; }
+    document.getElementById('lgMsg').innerHTML = 'Login aur <b>Allow</b> karke wapas aao. Yahan app khud khul jayega.';
+    document.getElementById('lgMsg').style.display = 'block';
+  });
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'visible' && !ready && get('cc_auth') === '1') startApp();
+  });
+  if(get('cc_auth') === '1') startApp(); else showLogin();
   if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
 </script>
 </body>
