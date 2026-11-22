@@ -1335,22 +1335,26 @@ function phase(){
   return {wk,name:'Bulk Mode',pct:'100%+',rpe:'8-9',sets:'3-4',note:'Progressive overload: har hafte thoda weight ya 1-2 reps zyada. Naye PR ka time.'};
 }
 function targets(){
-  const p=state.profile, w=latestWeight(), h=num(p.height), a=num(p.age);
-  if(!w||!h||!a) return null;
+  const p=state.profile, w=latestWeight(), h=num(p.height), a=num(p.age), ct=p.customTargets||{};
+  if(!w||!h||!a){
+    if(!ct.kcal&&!ct.protein) return null;
+    const ww=w||70, kc0=+ct.kcal||Math.round(ww*40/50)*50, pr0=+ct.protein||Math.round(ww*2), ft0=Math.round(ww*0.9);
+    return {bmr:0,tdee:kc0-300,kcal:kc0,protein:pr0,fat:ft0,carbs:Math.max(0,Math.round((kc0-pr0*4-ft0*9)/4)),water:+ct.water||Math.round(ww*0.04*10)/10,weeks:0,eta:'',goal:num(p.goal)||90,peak:num(p.peak)||83,w:ww,custom:true};
+  }
   const bmr = 10*w + 6.25*h - 5*a + (p.sex==='female'?-161:5);
   const act = {3:1.45,4:1.55,5:1.65,6:1.72}[p.days]||1.55;
   const tdee = bmr*act;
-  const kcal = Math.round((tdee+350)/50)*50;
-  const protein = Math.round(w*2);
+  const kcal = +ct.kcal || Math.round((tdee+350)/50)*50;
+  const protein = +ct.protein || Math.round(w*2);
   const fat = Math.round(w*0.9);
   const carbs = Math.max(0,Math.round((kcal-protein*4-fat*9)/4));
-  const water = Math.round(w*0.04*10)/10;
+  const water = +ct.water || Math.round(w*0.04*10)/10;
   const goal=num(p.goal)||90, peak=num(p.peak)||83;
   // regain (muscle memory) fast till old peak, then slow lean bulk
   const regain = Math.max(0,Math.min(peak,goal)-w);
   const newGain = Math.max(0,goal-Math.max(w,peak));
   const weeks = Math.ceil(regain/0.6 + newGain/0.3);
-  return {bmr:Math.round(bmr),tdee:Math.round(tdee),kcal,protein,fat,carbs,water,weeks,eta:addDays(today(),weeks*7),goal,peak,w};
+  return {bmr:Math.round(bmr),tdee:Math.round(tdee),kcal,protein,fat,carbs,water,weeks,eta:addDays(today(),weeks*7),goal,peak,w,custom:!!(ct.kcal||ct.protein||ct.water)};
 }
 
 /* ---------- workout templates ---------- */
@@ -1412,6 +1416,109 @@ const MEALS = {
     ['Sone se pehle','1 glass doodh / 200g dahi']
   ]
 };
+
+/* ---------- Coach brain v2: expert knowledge + data analytics ---------- */
+const COACH_KB=`EXPERT KNOWLEDGE (in rules ko apne data ke saath milake decision lo)
+
+1) TRAINING (natural lifter, evidence-based)
+- Hypertrophy volume: har muscle 10-20 hard sets / hafta (comeback ke pehle 2 hafte 6-10). Har muscle hafte me 2 baar. Set 0-3 RIR (failure se 0-3 rep pehle). Rest: compound 2-3 min, isolation 60-90 sec.
+- Rep ranges: compound 5-10, isolation 8-15, side delts/calves 12-20. Sab ranges muscle banati hain agar effort sahi hai.
+- Progression = DOUBLE PROGRESSION: rep range ke top tak saare sets ho jayein (jaise 3x10 @ 8-10) tab weight +2.5 kg (upper) / +5 kg (lower). Har session logbook ko harana hai: +1 rep ya +weight.
+- Plateau (3 session same/kam e1RM): pehle neend, protein, calories check; phir exercise variation badlo, ya 1 set kam karke intensity badhao; 6-8 hafte pe deload (volume 40-50% kam, weight ~10% kam, 1 hafta).
+- Exercise selection: har muscle ke liye 1 stretch-position exercise (jaise incline DB press, RDL, overhead triceps ext, incline curl, deep squat/leg press) + 1 compound. Machines aur cables bilkul valid hain.
+- Splits: 3 din = Full body x3; 4 din = Upper/Lower x2; 5 din = Upper/Lower + Push/Pull/Legs; 6 din = PPL x2.
+- Warm-up: 5 min halka cardio + har compound pe 2-3 ramp-up sets (40%, 60%, 80%).
+
+2) COMEBACK + MUSCLE MEMORY
+- Myonuclei training se badhte hain aur break ke baad bhi saalon tak rehte hain, isliye purana size naye se 2-3x tez wapas aata hai. Strength bhi neural adaptation se jaldi lautti hai.
+- Pehle 2 hafte: purane weight ka 50-60%, 2-3 sets, failure nahi (soreness/injury se bachne ke liye). Hafta 3-4: 70-80%. Hafta 5-8: 85-95%. Phir normal progressive overload.
+- Regain phase (purane peak tak): weight 0.5-0.75 kg/hafta badhna theek hai (muscle refill + glycogen). Peak ke upar naya muscle: 0.25-0.4 kg/hafta (lean bulk, ~0.25-0.5% body weight).
+- Sabse bada dushman = breaks. Rule: "kabhi zero day nahi": busy din pe bhi 20 min / 2 exercise ka minimum session.
+
+3) NUTRITION (Indian, khaas kar veg)
+- Protein: 1.6-2.2 g/kg/din, 4-5 meals me (har meal 25-40g). Calorie surplus lean bulk: maintenance + 250-400 kcal. Fat 0.8-1 g/kg, baaki carbs.
+- CALORIE ADJUSTMENT RULE: 2 hafte ka average weight dekho. Gain target se kam → +150-200 kcal/din. Target se zyada (aur kamar badh rahi) → -150-200 kcal. Target me → kuch mat badlo.
+- Veg protein (approx): paneer 100g = 18g P/265 kcal; soya chunks 50g dry = 26g P/170 kcal; whey 1 scoop = 24g P/120 kcal; dahi 200g = 7-8g P (Greek/hung curd 200g = 18-20g); doodh 1 glass 250ml = 8g P/150 kcal; tofu 100g = 10-12g P; moong/masoor dal 1 katori (30g dry) = 7g P; chana/rajma 1 katori pakka = 7-9g P; peanuts 30g = 7g P/170 kcal; peanut butter 2 tbsp = 7g P/190 kcal; roti 1 = 3g P/100 kcal; chawal 1 katori pakka (150g) = 4g P/200 kcal; oats 50g = 6.5g P/190 kcal; ande 1 = 6g P/75 kcal; egg white 1 = 3.5g P; chicken breast 100g = 31g P/165 kcal.
+- Sasta high-protein: soya chunks, dal + chawal, doodh, mungfali, ande, local paneer. Mass gainer ki zaroorat nahi: doodh + kela + oats + peanut butter shake = ~700 kcal.
+- Pre-workout: workout se 1-2 ghante pehle carbs + thoda protein. Post-workout: 25-40g protein + carbs (timing ka asar chhota hai, din ka total sabse zaroori).
+- Creatine monohydrate 3-5g roz, kisi bhi time, loading ki zaroorat nahi. Paani 35-40 ml/kg.
+
+4) RECOVERY
+- Neend 7-9 ghante. Neend <6h = strength aur muscle gain dono girte hain, bhookh badhti hai. Steps 7-10k/din (bulk me bhi fat control).
+- Soreness (DOMS) normal hai; tez/joint pain normal nahi. Dard ho to us exercise ka variation, range kam, ya physio.
+
+5) FAT LOSS / CUT (agar user maange)
+- Deficit 300-500 kcal, protein 2.2 g/kg, heavy training jaari, weight 0.5-1%/hafta girna chahiye.
+
+SOCHNE KA TAREEKA (har important jawab se pehle)
+- Upar "COACH ANALYTICS" me jo numbers hain unhe use karo. Generic advice mat do, user ke apne data se baat karo (jaise "pichle 7 din me avg protein 92g hai, target 145g se 53g kam").
+- Decision do, options ki list nahi: "Ye karo: X. Kyun: Y." Agar data kam hai to bolo kaunsa data chahiye.
+- Analytics me koi problem dikhe (protein kam, weight bahut tez/dheere, neend kam, kisi muscle ke sets kam, lift stall) to jawab ke end me 1 line me zaroor batao, chahe user ne na poocha ho.
+- Plan/review jaise bade jawab ke end me "👉 Agla kadam:" 1-3 seedhe action points.
+- Purana data chahiye (pichle mahine ka weight, kisi exercise ki poori history) to get_history tool chalao. Andaaza mat lagao.
+- User apne calorie/protein target khud set karna chahe ya tum analytics se adjust karo, to set_targets tool chalao.`;
+
+const MUSCLE_RX={
+  Chest:/bench|chest|fly|flye|pec|push.?up|dip/i,
+  Back:/row|pulldown|pull.?up|chin.?up|\blat\b|lats|deadlift|pullover|shrug/i,
+  Shoulders:/overhead|shoulder|ohp|military|lateral|side raise|front raise|face pull|rear delt|arnold/i,
+  Quads:/squat|leg press|lunge|leg extension|hack|step.?up/i,
+  Hamstrings:/romanian|rdl|leg curl|hamstring|good morning|stiff/i,
+  Glutes:/hip thrust|glute|bridge/i,
+  Biceps:/curl/i,
+  Triceps:/tricep|pushdown|push.?down|skull|overhead ext|close.?grip|dip|kickback/i,
+  Calves:/calf|calves/i,
+  Abs:/crunch|plank|\babs?\b|leg raise|ab wheel/i
+};
+function musclesOf(n){ const s=String(n||''); return Object.keys(MUSCLE_RX).filter(k=>{ if(k==='Biceps'&&/leg curl|hamstring/i.test(s)) return false; if(k==='Back'&&/romanian|rdl|stiff/i.test(s)) return false; return MUSCLE_RX[k].test(s); }); }
+function avg(a){ return a.length?a.reduce((x,y)=>x+y,0)/a.length:null; }
+function coachAnalytics(){
+  const t=today(), p=state.profile, T=targets(), L=sortedLogs();
+  const inRange=(d,a,b)=>{ const k=daysBetween(d,t); return k>=a&&k<=b; };
+  const out=[];
+  // weight trend
+  const wl=L.filter(l=>num(l.weight)!=null);
+  const w7=wl.filter(l=>inRange(l.date,0,6)).map(l=>num(l.weight)), w14=wl.filter(l=>inRange(l.date,7,13)).map(l=>num(l.weight));
+  const cur=latestWeight(), peak=num(p.peak)||cur, regain=cur&&peak&&cur<peak-0.5;
+  const tgtLo=regain?0.5:0.25, tgtHi=regain?0.75:0.4;
+  let rate=null;
+  if(w7.length&&w14.length) rate=avg(w7)-avg(w14);
+  else if(wl.length>=2){ const a=wl[0], b=wl[wl.length-1], d=daysBetween(a.date,b.date); if(d>=5) rate=(num(b.weight)-num(a.weight))/d*7; }
+  if(rate!=null){
+    let verdict='target me ✅ (calories mat badlo)';
+    if(rate<tgtLo-0.05) verdict='target se KAM → roz +150-200 kcal badhao';
+    if(rate>tgtHi+0.1) verdict='target se ZYADA → fat gain ka risk, roz -150 kcal';
+    out.push('- Weight trend: '+(rate>=0?'+':'')+rate.toFixed(2)+' kg/hafta (7-din avg '+(w7.length?avg(w7).toFixed(1):'-')+' kg). Target '+tgtLo+'-'+tgtHi+' kg/hafta ('+(regain?'regain phase, peak '+peak+' kg tak':'lean bulk')+'). Verdict: '+verdict+'.');
+  }else out.push('- Weight trend: data kam hai (kam se kam 5-7 din ka subah ka weight chahiye).');
+  // nutrition + sleep + consistency (last 7 days)
+  const l7=L.filter(l=>inRange(l.date,0,6));
+  const pr=l7.map(l=>num(l.protein)).filter(x=>x!=null&&x>0), kc=l7.map(l=>num(l.cal)).filter(x=>x!=null&&x>0), sl=l7.map(l=>num(l.sleep)).filter(x=>x!=null&&x>0);
+  if(pr.length) out.push('- Protein (7 din): avg '+Math.round(avg(pr))+'g'+(T?' vs target '+T.protein+'g → '+pr.filter(x=>x>=T.protein*0.9).length+'/'+pr.length+' din target hit':'')+'.');
+  else out.push('- Protein: pichle 7 din ka koi data nahi.');
+  if(kc.length) out.push('- Calories (7 din): avg '+Math.round(avg(kc))+' kcal'+(T?' vs target '+T.kcal:'')+'.');
+  if(sl.length) out.push('- Neend (7 din): avg '+avg(sl).toFixed(1)+' ghante'+(avg(sl)<7?' ⚠️ kam hai':'')+'.');
+  out.push('- Consistency: 7 me se '+l7.length+' din log kiya, '+l7.filter(isTrain).length+'/'+(p.days||4)+' workouts. Streak '+currentStreak()+' din.');
+  // weekly sets per muscle
+  const vol={}; state.sessions.filter(s=>inRange(s.date,0,6)).forEach(s=>(s.exercises||[]).forEach(e=>musclesOf(e.n).forEach(m=>{ vol[m]=(vol[m]||0)+(e.sets||[]).length; })));
+  const vk=Object.keys(MUSCLE_RX);
+  if(Object.keys(vol).length) out.push('- Is hafte sets/muscle: '+vk.map(k=>k+' '+(vol[k]||0)).join(', ')+'. (Target 10-20'+(phase().wk<=2?', comeback ke pehle 2 hafte 6-10 theek':'')+')');
+  else out.push('- Sets/muscle: is hafte koi detailed workout log nahi.');
+  // lift trends
+  const names={}; state.sessions.forEach(s=>(s.exercises||[]).forEach(e=>{ names[normEx(e.n)]=e.n; }));
+  const trends=[];
+  Object.keys(names).forEach(k=>{
+    const h=exHistory(names[k]); if(h.length<2) return;
+    const recent=h.filter(x=>inRange(x.date,0,13)), older=h.filter(x=>inRange(x.date,14,56));
+    const best=arr=>{ let b=0; arr.forEach(x=>{ const s=bestSet(x.sets); if(s&&s.v>b) b=s.v; }); return b; };
+    const last3=h.slice(-3).map(x=>{ const s=bestSet(x.sets); return s?s.v:0; });
+    const stall=last3.length===3&&last3[2]<=last3[0]+0.5;
+    if(recent.length&&older.length){ const a=best(older), b=best(recent); if(a) trends.push(names[k]+' '+(b>=a?'+':'')+Math.round((b-a)/a*100)+'%'+(stall?' (stall ⚠️)':'')); }
+    else if(stall) trends.push(names[k]+' stall ⚠️ (3 session se e1RM nahi badha)');
+  });
+  if(trends.length) out.push('- Strength trend (e1RM, 2 hafte vs pehle): '+trends.slice(0,8).join('; ')+'.');
+  if(T&&T.custom) out.push('- Targets user/coach ne custom set kiye hain.');
+  return out.join('\n');
+}
 
 /* ---------- AI coach ---------- */
 function systemPrompt(){
@@ -1478,6 +1585,8 @@ SAFETY (zaroori)
 - Supplements me sirf evidence-based cheezein: whey/plant protein, creatine monohydrate 3-5g roz, caffeine, vitamin D / omega-3 (agar diet me kami ho). Fat burners ya "mass gainer magic" ka hype mat karo.
 - Chest pain, chakkar, tez joint pain, numbness, ya koi medical condition ho to training rok ke doctor/physio se milne ko kaho.
 
+${COACH_KB}
+
 USER KI JAANKARI
 - Naam: ${p.name||'pata nahi'} | Age: ${p.age||'pata nahi'} | Height: ${p.height?p.height+' cm':'pata nahi'} | Gender: ${p.sex}
 - Abhi ka weight: ${latestWeight()||'pata nahi'} kg | Peak: ${p.peak} kg | Goal: ${p.goal} kg (aur uske baad bhi aage badhna hai)
@@ -1492,6 +1601,9 @@ ABHI KI STATUS (aaj ${today()})
 - Deload signal: ${deloadCheck()||'nahi'} | Ye chat: ${state.threadNames[state.activeThread]||'Fitness'}
 - Workout plan banao to save_plan me workout_days (har din ki exercises, sets, reps) zaroor bhejo, taaki Workout mode usi plan se chale.
 - ${t?`App ka estimate: maintenance ~${t.tdee} kcal, bulk target ${t.kcal} kcal, protein ${t.protein}g, fat ${t.fat}g, carbs ${t.carbs}g, paani ~${t.water} L. Goal tak ~${t.weeks} hafte (${t.eta}).`:'Calorie targets ke liye height/age missing hai.'}
+
+COACH ANALYTICS (app ne tumhare liye data se nikaala, isko use karo)
+${coachAnalytics()}
 
 YAAD RAKHI BAATEIN
 ${mem}
@@ -1526,7 +1638,7 @@ async function fetchModels(key){
   if(!list.length) throw new Error('Is key pe koi chat model nahi mila');
   const ver=n=>{const m=n.match(/gemini-(\d+(?:\.\d+)?)/);return m?parseFloat(m[1]):0;};
   const fast=state.settings.speed!=='smart';
-  const score=n=>(/flash/.test(n)?0:1)+(/lite/.test(n)?(fast?-0.5:0.5):0)+(/(preview|exp|latest)/.test(n)?0.3:0);
+  const score=n=>(/flash/.test(n)?0:(fast?1:0.2))+(/lite/.test(n)?0.6:0)+(/(preview|exp|latest)/.test(n)?0.3:0)+(/nano|omni|transcribe|argon|carbon|hydrogen|neon/.test(n)?2:0);
   list.sort((a,b)=>score(a)-score(b)||ver(b)-ver(a)||a.localeCompare(b));
   return list;
 }
@@ -1593,6 +1705,10 @@ const TOOLS=[{functionDeclarations:[
    parameters:{type:'object',properties:{
      theme:{type:'string',enum:['dark','light','auto']},
      accent:{type:'string',enum:['volt','orange','blue','green','purple','red']}}}},
+  {name:'get_history',description:'Purana data dekho jo upar context me nahi hai: kisi date range ke logs (weight, protein, neend), kisi exercise ki poori history (sets, e1RM), workouts, khana ya body naap. Trend, comparison ya "pichle mahine kya tha" jaise sawaal ke liye pehle ye chalao.',
+   parameters:{type:'object',properties:{type:{type:'string',enum:['logs','exercise','workouts','meals','measurements']},from:{type:'string',description:'YYYY-MM-DD'},to:{type:'string',description:'YYYY-MM-DD, default aaj'},exercise:{type:'string',description:'type=exercise ho to exercise ka naam'}},required:['type']}},
+  {name:'set_targets',description:'Roz ke calorie, protein ya paani target ko custom set karo (jab user bole, ya analytics ke hisaab se calories adjust karni ho). reset=true se app ke automatic target wapas.',
+   parameters:{type:'object',properties:{kcal:{type:'number'},protein:{type:'number',description:'grams'},water:{type:'number',description:'litre'},reset:{type:'boolean'}}}},
   {name:'log_workout',description:'Gym workout ka POORA detail save karo: har exercise aur uska har set (weight kg + reps). Jab bhi user sets/reps/weight bataye ya workout paste kare, ye call karo. "3x8 @ 60kg" ko 3 alag set objects me likho. PR app khud nikaal lega.',
    parameters:{type:'object',properties:{
      date:{type:'string',description:'YYYY-MM-DD, default aaj'},
@@ -1838,6 +1954,25 @@ async function runTool(name,a){
     if(['volt','orange','blue','green','purple','red'].indexOf(a.accent)>=0){ state.settings.accent=a.accent; bits.push('rang '+a.accent); }
     if(!bits.length) return {ok:false,error:'Kuch nahi badla'};
     applyTheme(); summary='🎨 Look badla: '+bits.join(', ');
+  }else if(name==='get_history'){
+    const to=validDate(a.to), from=/^\d{4}-\d{2}-\d{2}$/.test(a.from||'')?a.from:addDays(to,-30), inR=d=>d>=from&&d<=to;
+    let rows=[];
+    if(a.type==='logs') rows=sortedLogs().filter(l=>inR(l.date)).map(l=>({date:l.date,weight:l.weight,workout:l.work,protein:l.protein,kcal:l.cal,sleep:l.sleep,water:l.water,note:String(l.note||'').slice(0,160)}));
+    else if(a.type==='exercise'){ if(!a.exercise) return {ok:false,error:'exercise ka naam do'}; rows=exHistory(a.exercise).filter(h=>inR(h.date)).map(h=>{ const b=bestSet(h.sets); return {date:h.date,sets:fmtSets(h.sets),best_e1rm:b?Math.round(b.v*10)/10:null}; }); }
+    else if(a.type==='workouts') rows=state.sessions.filter(x=>inR(x.date)).map(x=>({date:x.date,name:x.name,exercises:x.exercises.map(e=>e.n+' '+fmtSets(e.sets)).join('; ')}));
+    else if(a.type==='meals') rows=state.meals.filter(m=>inR(m.date)).map(m=>({date:m.date,name:m.name,qty:m.qty,protein:m.p,kcal:m.c}));
+    else if(a.type==='measurements') rows=state.measures.filter(m=>inR(m.date));
+    else return {ok:false,error:'type galat'};
+    if(rows.length>120) rows=rows.slice(-120);
+    return {ok:true,from,to,count:rows.length,rows};
+  }else if(name==='set_targets'){
+    if(a.reset){ delete state.profile.customTargets; summary='🎯 Targets wapas automatic'; }
+    else{ const ct=Object.assign({},state.profile.customTargets||{}), bits=[];
+      if(+a.kcal>800){ ct.kcal=Math.round(+a.kcal); bits.push(ct.kcal+' kcal'); }
+      if(+a.protein>20){ ct.protein=Math.round(+a.protein); bits.push(ct.protein+'g protein'); }
+      if(+a.water>0.5){ ct.water=Math.round(+a.water*10)/10; bits.push(ct.water+' L paani'); }
+      if(!bits.length) return {ok:false,error:'Koi valid target nahi'};
+      state.profile.customTargets=ct; summary='🎯 Naye roz ke targets: '+bits.join(', '); }
   }else if(name==='web_search'){
     const q=String(a.query||'').trim(); if(!q) return {ok:false,error:'query khaali hai'};
     const r=await googleSearch(q);
@@ -1864,6 +1999,9 @@ async function callGemini(messages,onChunk,onAction,image){
   if(!key) throw new Error('NOKEY');
   try{ await ensureModel(key,false); }
   catch(e){ throw new Error('API key check nahi hui: '+e.message); }
+  if(!state.settings.brainv2){ state.settings.brainv2=true; try{ await ensureModel(key,true); }catch(e){} }
+  const lastU=(messages.filter(m=>m.role==='user').pop()||{}).text||'';
+  HEAVY=!!image||lastU.length>350||/plan|program|routine|review|analy|report|kyun|kyu |why|explain|samjha|compare|strategy|plateau|stuck|progress|diet|meal|split|cut|bulk|injury|dard|calculate|hisaab/i.test(lastU);
   const contents=toContents(messages);
   if(image&&contents.length){ const lc=contents[contents.length-1]; if(lc.role==='user') lc.parts.push({inlineData:{mimeType:image.mime,data:image.data}}); }
   const cur=state.settings.model;
@@ -1914,11 +2052,11 @@ async function callGemini(messages,onChunk,onAction,image){
   if(!allText){const err=new Error('Coach ka jawab khaali aaya. Dobara try karo.');err.status=0;throw err;}
   return {text:allText,actions,sources};
 }
-const noThink={};
+const noThink={}; let HEAVY=false;
 async function tryModel(key,model,contents,onChunk){
   model=model.replace(/^models\//,'');
-  const gen={temperature:0.7};
-  if(state.settings.speed!=='smart' && !noThink[model]) gen.thinkingConfig={thinkingLevel:'low'};
+  const gen={temperature:0.6};
+  if(!noThink[model]) gen.thinkingConfig={thinkingLevel:(state.settings.speed==='smart'||HEAVY)?'high':'low'};
   const res = await apiFetch(API+'/models/'+encodeURIComponent(model)+':streamGenerateContent?alt=sse',{
     method:'POST',
     headers:{'Content-Type':'application/json','x-goog-api-key':key},
