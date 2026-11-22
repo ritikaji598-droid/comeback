@@ -1467,6 +1467,8 @@ APP KE TOOLS (bahut zaroori)
 - Naya goal, age, height, gym din, diet type, injury ya best lift bataye to update_profile call karo.
 - Koi zaroori aadat, pasand-napasand, schedule ya problem (jaise "subah 6 baje gym", "squat se ghutna dukhta hai", "paneer pasand nahi") ho to remember call karo. Jo profile me pehle se hai use remember mat karo.
 - Jab bhi poora workout ya diet plan banao, save_plan zaroor call karo (poora plan content me), aur aage ke jawab usi saved plan ke hisaab se do.
+- HATANA / DELETE: user jab bhi kuch hatane, delete, saaf, remove ya "galat add ho gaya" bole (grocery list, plan, khana, workout, naap, paani, supplement, yaad, chat) to delete_data call karo. Grocery me kuch items jodne/hatane/kharida mark karne ke liye update_grocery. Purana din ka poora log hatana ho to delete_log. Theme/rang badalna ho to update_settings.
+- KABHI JHOOTH MAT BOLO: jab tak tool call karke {ok:true} na mile, mat bolo "kar diya / hata diya / save ho gaya". Tool error de to user ko saaf batao kya nahi hua aur kyun.
 - Ek message me kai cheezein hon to saare tools ek saath chalao.
 - Tool ke baad 1 line me batao kya save kiya, phir coach wali salah do (jaise aaj ke log pe chhota feedback).
 - Sirf sawaal ho to tool mat chalao.
@@ -1496,6 +1498,9 @@ ${mem}
 
 PLANS
 ${plansTxt}
+
+GROCERY LIST (app me abhi)
+${(state.grocery&&state.grocery.items&&state.grocery.items.length)?state.grocery.items.map(x=>'- '+x.n+(x.q?' ('+x.q+')':'')+(x.done?' ✓ kharida':'')).join('\n'):'Khaali hai'}
 
 AAJ KA DATA
 ${todayCtx}
@@ -1569,8 +1574,25 @@ const TOOLS=[{functionDeclarations:[
    parameters:{type:'object',properties:{items:{type:'array',items:{type:'object',properties:{name:{type:'string'},qty:{type:'string'},category:{type:'string',description:'Jaise Protein, Anaaj, Doodh, Sabzi/Fal, Supplements'},price_inr:{type:'number'}},required:['name']}}},required:['items']}},
   {name:'web_search',description:'Google pe search karke latest aur sahi jaankari lao. Current news, prices, naye launches, sports, nayi research, aaj/is hafte ki baatein, ya koi bhi fact jo pakka nahi pata ya badal sakta hai.',
    parameters:{type:'object',properties:{query:{type:'string',description:'Saaf aur specific search query'}},required:['query']}},
-  {name:'delete_log',description:'Kisi din ka log delete karo.',
+  {name:'delete_log',description:'Kisi din ka poora log delete karo.',
    parameters:{type:'object',properties:{date:{type:'string',description:'YYYY-MM-DD'}},required:['date']}},
+  {name:'delete_data',description:'App se koi bhi cheez HATAO / DELETE / SAAF karo jab user bole: grocery list, plan, khana (meal), workout session, body naap, paani, supplement tick, yaad rakhi baatein, chat. Jab bhi user "hata do", "delete karo", "saaf karo", "remove", "galat add hua" bole, ye tool zaroor call karo.',
+   parameters:{type:'object',properties:{
+     what:{type:'string',enum:['grocery','plan','meal','workout','measurements','water','supplement','memory','chat'],description:'grocery = poori grocery list ya kuch items; plan = saved plan; meal = khaya hua khana item; workout = workout session; measurements = body naap; water = paani reset; supplement = supplement ka tick hatao; memory = saari yaad; chat = abhi wali chat saaf'},
+     match:{type:'string',description:'Kis cheez ko hatana hai uska naam/hissa (jaise "paneer", "Push day plan", "Creatine"). Khaali chhodo agar sab hatana hai.'},
+     date:{type:'string',description:'YYYY-MM-DD (meal/workout/measurements/water/supplement ke liye). Default aaj.'},
+     all:{type:'boolean',description:'true = us type ka SAB kuch hatao (jaise poori grocery list, saare plans)'}},
+     required:['what']}},
+  {name:'update_grocery',description:'Grocery list me items JODO, HATAO ya kharida hua (done) mark karo, bina poori list badle. Poori nayi list ke liye save_grocery use karo.',
+   parameters:{type:'object',properties:{
+     add:{type:'array',items:{type:'object',properties:{name:{type:'string'},qty:{type:'string'},category:{type:'string'},price_inr:{type:'number'}},required:['name']}},
+     remove:{type:'array',items:{type:'string'},description:'Hatane wale items ke naam'},
+     mark_done:{type:'array',items:{type:'string'},description:'Kharid liye gaye items ke naam'},
+     mark_undone:{type:'array',items:{type:'string'}}}}},
+  {name:'update_settings',description:'App ka look badlo: theme (dark/light/auto) ya rang (accent).',
+   parameters:{type:'object',properties:{
+     theme:{type:'string',enum:['dark','light','auto']},
+     accent:{type:'string',enum:['volt','orange','blue','green','purple','red']}}}},
   {name:'log_workout',description:'Gym workout ka POORA detail save karo: har exercise aur uska har set (weight kg + reps). Jab bhi user sets/reps/weight bataye ya workout paste kare, ye call karo. "3x8 @ 60kg" ko 3 alag set objects me likho. PR app khud nikaal lega.',
    parameters:{type:'object',properties:{
      date:{type:'string',description:'YYYY-MM-DD, default aaj'},
@@ -1760,6 +1782,62 @@ async function runTool(name,a){
     if(!bits.length) return {ok:false,error:'koi naap nahi'};
     state.measures=state.measures.filter(x=>x.date!==m.date).concat([Object.assign({},state.measures.find(x=>x.date===m.date)||{},m)]);
     summary='📏 Naap save: '+bits.join(', ');
+  }else if(name==='delete_data'){
+    const what=String(a.what||''), q=String(a.match||'').toLowerCase().trim(), all=!!a.all||!q, date=validDate(a.date);
+    const has=s=>String(s||'').toLowerCase().indexOf(q)>=0;
+    let n=0;
+    if(what==='grocery'){
+      const items=(state.grocery&&state.grocery.items)||[];
+      if(!items.length) return {ok:false,error:'Grocery list pehle se khaali hai'};
+      if(all){ n=items.length; state.grocery={date:'',items:[]}; summary='🗑️ Poori grocery list hata di ('+n+' items)'; }
+      else{ const keep=items.filter(x=>!has(x.n)); n=items.length-keep.length; if(!n) return {ok:false,error:'Grocery me "'+a.match+'" nahi mila. Items: '+items.map(x=>x.n).join(', ')}; state.grocery.items=keep; summary='🗑️ Grocery se hataya: '+n+' item ('+a.match+')'; }
+    }else if(what==='plan'){
+      if(!state.plans.length) return {ok:false,error:'Koi saved plan nahi hai'};
+      const keep=all?[]:state.plans.filter(p=>!(has(p.title)||has(p.kind))); n=state.plans.length-keep.length;
+      if(!n) return {ok:false,error:'Aisa plan nahi mila. Plans: '+state.plans.map(p=>p.title).join(', ')};
+      state.plans=keep; summary='🗑️ '+n+' plan hata diya'+(all?' (saare)':' ('+a.match+')');
+    }else if(what==='meal'){
+      const ms=state.meals.filter(m=>m.date===date&&(all||has(m.name)));
+      if(!ms.length) return {ok:false,error:niceDate(date)+' ko aisa khana nahi mila. Khana: '+state.meals.filter(m=>m.date===date).map(m=>m.name).join(', ')};
+      ms.forEach(m=>removeMeal(m.id)); n=ms.length; const l=dayLog(date);
+      summary='🗑️ Khana hataya: '+ms.map(m=>m.name).join(', ')+' (aaj total ab '+(l.protein||0)+'g / '+(l.cal||0)+' kcal)';
+    }else if(what==='workout'){
+      const before=state.sessions.length;
+      state.sessions=state.sessions.filter(s=>!(s.date===date&&(all||has(s.name)||(s.exercises||[]).some(e=>has(e.n)))));
+      n=before-state.sessions.length; if(!n) return {ok:false,error:niceDate(date)+' ka aisa workout nahi mila'};
+      const l=state.logs.find(x=>x.date===date); if(l&&!state.sessions.some(s=>s.date===date)&&isTrain(l)) l.work='';
+      summary='🗑️ '+n+' workout session hataya ('+niceDate(date)+')';
+    }else if(what==='measurements'){
+      const before=state.measures.length; state.measures=state.measures.filter(m=>!(all&&!a.date?true:m.date===date)); n=before-state.measures.length;
+      if(!n) return {ok:false,error:'Naap nahi mila'}; summary='🗑️ Body naap hataya';
+    }else if(what==='water'){
+      const l=dayLog(date); l.water=0; summary='🗑️ '+niceDate(date)+' ka paani 0 kar diya';
+    }else if(what==='supplement'){
+      const l=dayLog(date); const before=(l.supps||[]).length; l.supps=all?[]:(l.supps||[]).filter(s=>!has(s)); n=before-l.supps.length;
+      if(!n) return {ok:false,error:'Aisa supplement tick nahi tha'}; summary='🗑️ Supplement tick hataya';
+    }else if(what==='memory'){
+      const before=state.memory.length; state.memory=all?[]:state.memory.filter(m=>!has(m.text)); n=before-state.memory.length;
+      if(!n) return {ok:false,error:'Aisi koi baat yaad nahi thi'}; summary='🧹 '+n+' yaad rakhi baat hatayi';
+    }else if(what==='chat'){
+      setTimeout(()=>{ state.chat=state.chat.slice(-2); save(); renderChat(); },400); summary='🧹 Chat saaf kar di';
+    }else return {ok:false,error:'Unknown what'};
+  }else if(name==='update_grocery'){
+    if(!state.grocery||!Array.isArray(state.grocery.items)) state.grocery={date:today(),items:[]};
+    const it=state.grocery.items, bits=[], m=(x,list)=>(list||[]).some(r=>String(x.n).toLowerCase().indexOf(String(r).toLowerCase())>=0);
+    (a.add||[]).filter(x=>x&&x.name).forEach(x=>{ it.push({n:String(x.name),q:String(x.qty||''),c:String(x.category||'Other'),p:+x.price_inr||0,done:false}); });
+    if((a.add||[]).length) bits.push('+'+a.add.length+' add');
+    if((a.remove||[]).length){ const b=it.length; state.grocery.items=it.filter(x=>!m(x,a.remove)); bits.push((b-state.grocery.items.length)+' hataye'); }
+    state.grocery.items.forEach(x=>{ if(m(x,a.mark_done)) x.done=true; if(m(x,a.mark_undone)) x.done=false; });
+    if((a.mark_done||[]).length) bits.push((a.mark_done.length)+' kharida ✓');
+    if(!bits.length) return {ok:false,error:'Kuch badla nahi'};
+    if(!state.grocery.date) state.grocery.date=today();
+    summary='🛒 Grocery update: '+bits.join(', ')+' (ab '+state.grocery.items.length+' items)';
+  }else if(name==='update_settings'){
+    const bits=[];
+    if(['dark','light','auto'].indexOf(a.theme)>=0){ state.settings.theme=a.theme; bits.push('theme '+a.theme); }
+    if(['volt','orange','blue','green','purple','red'].indexOf(a.accent)>=0){ state.settings.accent=a.accent; bits.push('rang '+a.accent); }
+    if(!bits.length) return {ok:false,error:'Kuch nahi badla'};
+    applyTheme(); summary='🎨 Look badla: '+bits.join(', ');
   }else if(name==='web_search'){
     const q=String(a.query||'').trim(); if(!q) return {ok:false,error:'query khaali hai'};
     const r=await googleSearch(q);
