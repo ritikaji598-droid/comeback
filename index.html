@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
    COMEBACK COACH · v12 · "Sporty bold" design system
@@ -487,6 +487,278 @@ canvas{width:100%;height:270px;display:block}
 #toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;z-index:400;background:var(--text);color:var(--bg);padding:12px 18px;border-radius:10px;font:800 16px/1.2 var(--display);text-transform:uppercase;letter-spacing:.04em;box-shadow:var(--shadow);transition:.25s;max-width:92vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media (min-width:820px){#toast{bottom:28px}}
+
+
+
+/* =========================================================
+   COMEBACK · v13 "Pro" skin
+   Premium fitness-app look: Inter Tight, mixed case, soft
+   layered cards, metric colours, sidebar on desktop.
+   ========================================================= */
+:root{
+  --display:"Inter Tight","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --num:"Inter Tight","Inter",system-ui,sans-serif;
+  --bg:#09090b; --bg2:#0f0f12; --card:#131316; --card2:#1a1a1f; --card3:#26262d;
+  --surface:linear-gradient(180deg,#16161a 0%,#121215 100%);
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
+  --text:#fafafa; --muted:#a1a1aa; --dim:#71717a;
+  --c-work:var(--accent); --c-prot:#ff8a3d; --c-water:#38bdf8; --c-kcal:#f43f5e; --c-sleep:#a78bfa; --c-fire:#fb923c;
+  --r:22px; --r-sm:16px;
+  --shadow:0 24px 60px -20px rgba(0,0,0,.6);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f4f4f6; --bg2:#ececf0; --card:#ffffff; --card2:#f4f4f6; --card3:#e4e4e9;
+    --surface:#ffffff; --line:rgba(10,10,20,.07); --line2:rgba(10,10,20,.14);
+    --text:#0a0a0f; --muted:#5b5b66; --dim:#8b8b96;
+    --shadow:0 20px 50px -24px rgba(20,20,40,.25);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f4f4f6; --bg2:#ececf0; --card:#ffffff; --card2:#f4f4f6; --card3:#e4e4e9;
+  --surface:#ffffff; --line:rgba(10,10,20,.07); --line2:rgba(10,10,20,.14);
+  --text:#0a0a0f; --muted:#5b5b66; --dim:#8b8b96;
+  --shadow:0 20px 50px -24px rgba(20,20,40,.25);
+}
+body{
+  font:15.5px/1.55 var(--font);letter-spacing:-.011em;
+  background:
+    radial-gradient(900px 520px at 85% -12%, rgba(var(--acc-rgb),.13), transparent 62%),
+    radial-gradient(700px 480px at -10% 8%, rgba(var(--acc2-rgb),.06), transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+}
+
+/* ---- no more SHOUTING: mixed-case everywhere ---- */
+.brand h1,.brand small,.pill,.topnav button,.bottomnav button,.page-h h2,.card h2,.card h3,.stat span,.stat b,label,.btn,.seg button,
+.hello,.bignum span,.hero-meta,.wd,.wk-name,.exlist li span,.meter .top,.meter .top span,.qa,.chat-h b,.tag,.thread,.msg h3,.msg h4,.msg th,
+.srcs span,.tbl th,.day h4,.wt-c span,.wchip,.mini span,.food span,.schip,.pbars .tl span,.pb small,.pr b,.pr-v,.pr-v small,.badge strong,
+.lib summary b,.lib .body h5,.gcat,.ph span,.compare .lbl,.sheet-in h3,.sheet-grid button,.wo-h h2,.wo-top b,.wo-top span,.dset,.timer b,
+.acct-row b,#toast,#splash b,#splash span,.step,.wt-c input,.mini input,.wo-in2 input,.bignum b{
+  text-transform:none !important;letter-spacing:-.015em !important;
+}
+
+/* ---- surfaces ---- */
+.card,.stat,.qa,.hero,.askbar,.wo-ex,.modal-in,.sheet-in{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),var(--shadow);
+}
+.card{padding:20px;margin-bottom:14px}
+.card h2{font:700 17px/1.2 var(--display);gap:10px;margin:0 0 16px}
+.card h2 svg{width:18px;height:18px}
+.card h3{font:650 14px/1.2 var(--display);color:var(--muted);margin:20px 0 10px}
+.two{gap:14px;margin-bottom:14px}
+.page-h{margin:6px 2px 20px}
+.page-h h2{font:800 34px/1.05 var(--display);letter-spacing:-.035em !important}
+.page-h p{font-size:15px}
+.stat{padding:16px;border-radius:var(--r-sm)}
+.stat span{font:500 12.5px/1.2 var(--font);color:var(--muted)}
+.stat b{font:750 26px/1.1 var(--num);margin-top:6px;letter-spacing:-.03em !important}
+.banner{border-radius:var(--r-sm);padding:14px 16px}
+
+/* ---- controls ---- */
+label{font:550 13px/1.3 var(--font);color:var(--muted);margin:0 0 7px}
+input,select,textarea{border-radius:12px;background:var(--card2);border-color:var(--line);font-size:15.5px}
+.btn{border-radius:999px;font:650 15px/1 var(--font);padding:0 22px;min-height:46px;box-shadow:0 8px 24px -10px rgba(var(--acc-rgb),.7)}
+.btn.ghost{background:rgba(255,255,255,.03);border:1px solid var(--line2);box-shadow:none}
+:root[data-theme="light"] .btn.ghost{background:#fff}
+.btn.small{min-height:38px;padding:0 16px;font-size:14px;border-radius:999px}
+.btn.big{min-height:54px;font-size:16.5px;border-radius:999px}
+.seg{border-radius:14px}
+.seg button{font:600 14px/1 var(--font);border-radius:10px}
+.pill{font:600 12.5px/1 var(--font);border-radius:999px;height:32px;padding:0 12px}
+.iconbtn{border-radius:12px}
+.chip,.thread{border-radius:999px}
+.thread{font:600 13.5px/1 var(--font)}
+.schip{border-radius:999px;font:600 13.5px/1 var(--font)}
+.wchip{border-radius:14px;font:650 14.5px/1 var(--font)}
+.food{border-radius:16px}
+.food span{font:650 13px/1.2 var(--font)}
+.mini{border-radius:16px}
+.mini span{font:550 12.5px/1 var(--font)}
+.mini input{font:750 26px/1 var(--num)}
+.wt-c input{font:800 64px/1 var(--num);letter-spacing:-.04em !important}
+.wt-c span{font:500 13px/1 var(--font)}
+.step{border-radius:50%;font:600 26px/1 var(--font)}
+.meter .top{font:550 13.5px/1 var(--font);color:var(--muted)}
+.meter .top span{font:700 14px/1 var(--num);color:var(--text)}
+.bar,.herobar{border-radius:99px}
+.bar i,.herobar i{border-radius:99px;background:var(--grad)}
+.tbl th{font:550 12.5px/1 var(--font)}
+.day{border-radius:16px}
+.day h4{font:700 15px/1.2 var(--display)}
+.pr b{font:650 15px/1.2 var(--display)}
+.pr-v{font:750 18px/1.1 var(--num)}
+.pr-v small{font:600 12px/1.2 var(--font)}
+.badge{border-radius:18px}
+.badge strong{font:700 14px/1.15 var(--display)}
+.lib summary b{font:650 15px/1.2 var(--display)}
+.lib .body h5{font:650 12.5px/1 var(--font)}
+.gcat{font:650 12.5px/1 var(--font)}
+.sheet-in{border-radius:26px 26px 0 0}
+.sheet-in h3{font:750 22px/1.1 var(--display)}
+.sheet-grid button{font:600 13.5px/1.15 var(--font);border-radius:18px;background:var(--card2)}
+.wo-h h2{font:800 34px/1 var(--display);letter-spacing:-.035em !important}
+.wo-top b{font:700 18px/1.15 var(--display)}
+.wo-top span{font:700 15px/1 var(--num)}
+.wo-in2 input{font:750 24px/1 var(--num)}
+.dset{border-radius:999px;font:700 14px/1 var(--num)}
+.timer b{font:800 48px/.95 var(--num);letter-spacing:-.04em !important}
+.acct-row b{font:700 18px/1.2 var(--display)}
+.acct-av{font:700 22px/1 var(--display)}
+.chat-h b{font:700 16px/1.1 var(--display)}
+.tag{font:650 10.5px/1 var(--font);border-radius:999px;padding:4px 8px}
+.msg{border-radius:20px;font-size:15px}
+.msg.user{font-weight:500}
+.msg h3,.msg h4{font:700 16.5px/1.25 var(--display)}
+.msg th{font:600 13px/1.2 var(--font)}
+.srcs span{font:600 12px/1 var(--font)}
+.composer textarea{border-radius:24px}
+.send,.attach{border-radius:50%}
+#toast{font:600 14.5px/1.3 var(--font);border-radius:999px;padding:12px 20px}
+#splash b{font:800 30px/1 var(--display)}
+#splash span{font:500 13px/1 var(--font);letter-spacing:0 !important}
+
+/* ---- top bar (phone + tablet) ---- */
+.topbar{background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom-color:transparent}
+.brand h1{font:800 21px/1 var(--display);letter-spacing:-.03em !important}
+.brand small{font:500 12px/1.2 var(--font);letter-spacing:0 !important;margin-top:3px}
+.logo{border-radius:12px;background:var(--grad);box-shadow:0 8px 20px -8px rgba(var(--acc-rgb),.8)}
+.topnav button{font:600 14.5px/1 var(--font);border-radius:999px;padding:0 16px}
+.topnav button.on{background:var(--text);color:var(--bg)}
+
+/* ---- bottom nav (phone) ---- */
+@media (max-width:819px){
+  .bottomnav{height:calc(70px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border-top:1px solid var(--line)}
+  .bottomnav button{font:600 11px/1 var(--font);gap:5px;color:var(--dim)}
+  .bottomnav button.on{color:var(--text)}
+  .bottomnav button.on svg{color:var(--accent-ink)}
+  .bottomnav button.on:after{display:none}
+  .page-h h2{font-size:30px}
+  .card{padding:18px}
+  .card.chat{margin:-8px -16px 0;padding:0;border-radius:0;border-left:0;border-right:0;border-top:0;box-shadow:none;background:transparent}
+  .composer textarea{min-height:46px;padding:12px 16px}
+}
+.bottomnav .fab{border-radius:50%;background:var(--grad);box-shadow:0 10px 26px -6px rgba(var(--acc-rgb),.75)}
+
+/* ---- desktop: sidebar app shell ---- */
+@media (min-width:1024px){
+  .topbar{position:fixed;top:0;left:0;bottom:0;width:248px;display:flex;flex-direction:column;padding:22px 14px 18px;border-right:1px solid var(--line);border-bottom:0;background:color-mix(in srgb,var(--bg2) 85%,transparent)}
+  .topbar-in{display:contents}
+  .brand{order:0;margin:0 8px 30px}
+  .topnav{order:1;flex-direction:column;gap:3px;padding:0;margin:0;max-width:none}
+  .topnav button{height:46px;justify-content:flex-start;gap:12px;padding:0 14px;border-radius:14px;font:550 15px/1 var(--font);color:var(--muted)}
+  .topnav button svg{width:20px;height:20px}
+  .topnav button:hover{background:rgba(255,255,255,.04);color:var(--text)}
+  .topnav button.on{background:rgba(var(--acc-rgb),.14);color:var(--text)}
+  .topnav button.on svg{color:var(--accent-ink)}
+  #weekBadge{order:2;margin-top:auto;align-self:flex-start;margin-left:8px;margin-bottom:10px}
+  #cloudBadge{order:3;align-self:flex-start;margin-left:8px;margin-bottom:12px;background:transparent;border-color:transparent;color:var(--muted);padding:0}
+  .topbar .iconbtn[data-t="profile"]{order:4;width:100%;height:46px;display:flex;justify-content:flex-start;gap:12px;padding:0 14px;border-radius:14px;background:var(--card2);font:550 15px/1 var(--font);color:var(--text)}
+  .topbar .iconbtn[data-t="profile"]:after{content:"Profile & settings"}
+  .topbar .iconbtn[data-t="profile"].on{background:rgba(var(--acc-rgb),.14)}
+  main.wrap{max-width:none;margin:0 0 0 248px;padding:0 40px 60px}
+  main.wrap > section{max-width:1120px;margin:0 auto;padding-top:30px}
+  .chat{height:calc(100dvh - 60px)}
+  #toast{left:calc(50% + 124px)}
+}
+
+/* =========================================================
+   HOME v13
+   ========================================================= */
+.h-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 18px}
+.h-head small{display:block;font:500 13.5px/1.2 var(--font);color:var(--muted);margin-bottom:6px}
+.h-head h2{margin:0;font:800 32px/1.05 var(--display);letter-spacing:-.035em}
+.h-head h2 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.h-chipline{display:flex;gap:8px;flex-wrap:wrap}
+.h-chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;background:var(--card2);border:1px solid var(--line);font:600 13px/1 var(--font);color:var(--text);white-space:nowrap}
+.h-chip.acc{background:rgba(var(--acc-rgb),.14);border-color:rgba(var(--acc-rgb),.35);color:var(--accent-ink)}
+.h-chip.fire{color:var(--c-fire);background:rgba(251,146,60,.12);border-color:rgba(251,146,60,.3)}
+.h-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1.15fr 1fr;gap:20px;align-items:center;padding:26px;margin-bottom:14px}
+.h-hero:before{content:"";position:absolute;inset:auto -80px -120px auto;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(var(--acc-rgb),.22),transparent 65%);pointer-events:none}
+.h-w small{font:550 13.5px/1 var(--font);color:var(--muted)}
+.h-big{display:flex;align-items:baseline;gap:8px;margin:10px 0 4px}
+.h-big b{font:800 84px/.9 var(--num);letter-spacing:-.05em}
+.h-big span{font:650 22px/1 var(--font);color:var(--muted)}
+.h-sub{font:500 14.5px/1.45 var(--font);color:var(--muted);margin:0}
+.h-sub b{color:var(--text);font-weight:650}
+.h-prog{margin:18px 0 8px;height:10px;border-radius:99px;background:var(--card3);overflow:hidden}
+.h-prog i{display:block;height:100%;border-radius:99px;background:var(--grad);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.h-progm{display:flex;justify-content:space-between;font:550 13px/1 var(--font);color:var(--muted)}
+.h-progm b{color:var(--text);font-weight:700}
+.h-msg{margin:16px 0 0;font:500 14px/1.5 var(--font);color:var(--muted)}
+.h-rings{display:flex;align-items:center;justify-content:center;gap:22px}
+.h-rings svg{width:168px;height:168px;flex:0 0 auto;transform:rotate(-90deg)}
+.h-rings circle{fill:none;stroke-linecap:round}
+.h-rings .trk{opacity:.16}
+.h-rings .val{transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
+.h-leg{display:flex;flex-direction:column;gap:14px}
+.h-leg div{display:flex;flex-direction:column;gap:3px}
+.h-leg span{display:flex;align-items:center;gap:7px;font:550 12.5px/1 var(--font);color:var(--muted)}
+.h-leg span:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--dot)}
+.h-leg b{font:750 19px/1.1 var(--num);letter-spacing:-.03em}
+.h-leg b small{font:550 12.5px/1 var(--font);color:var(--muted);margin-left:3px}
+@media (max-width:760px){
+  .h-hero{grid-template-columns:1fr;padding:22px}
+  .h-big b{font-size:76px}
+  .h-rings{justify-content:space-between;padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
+  .h-rings svg{width:136px;height:136px}
+  .h-head h2{font-size:28px}
+}
+.h-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+@media (max-width:760px){.h-tiles{grid-template-columns:1fr 1fr;gap:10px}}
+.tile{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:var(--r-sm);background:var(--surface);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.035);text-align:left;color:var(--text);cursor:pointer;transition:transform .15s,border-color .15s;font:inherit}
+.tile:hover{border-color:var(--line2);transform:translateY(-2px)}
+.tile .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--tc) 16%,transparent);color:var(--tc)}
+.tile .ic svg{width:20px;height:20px}
+.tile b{display:block;font:750 24px/1 var(--num);letter-spacing:-.035em}
+.tile b small{font:550 13px/1 var(--font);color:var(--muted);margin-left:4px;letter-spacing:0}
+.tile span{display:block;font:500 13px/1.2 var(--font);color:var(--muted);margin-top:5px}
+.h-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;margin-bottom:14px}
+.h-grid > .card{margin:0}
+@media (max-width:860px){.h-grid{grid-template-columns:1fr}}
+.h-cardh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.h-cardh h3{margin:0;font:700 17px/1.2 var(--display);letter-spacing:-.02em;color:var(--text)}
+.h-cardh span{font:550 13px/1.2 var(--font);color:var(--muted);white-space:nowrap;text-align:right}
+.brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (min-width:1024px){.brand small{display:none}}
+.h-wo-name{font:800 30px/1.05 var(--display);letter-spacing:-.035em;margin:0 0 4px}
+.h-wo-meta{font:500 13.5px/1.4 var(--font);color:var(--muted);margin:0}
+.h-ex{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column}
+.h-ex li{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);font:550 14.5px/1.3 var(--font)}
+.h-ex li i{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--card2);font:700 12.5px/1 var(--num);font-style:normal;color:var(--muted);flex:0 0 auto}
+.h-ex li span{margin-left:auto;font:650 13.5px/1 var(--num);color:var(--accent-ink);white-space:nowrap}
+.h-rest{display:flex;gap:14px;align-items:center;padding:14px;border-radius:16px;background:var(--card2);margin-top:14px}
+.h-rest b{font-size:28px}
+.h-rest p{margin:0;font:500 13.5px/1.45 var(--font);color:var(--muted)}
+.h-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.h-day{display:flex;flex-direction:column;align-items:center;gap:8px;font:600 12px/1 var(--font);color:var(--dim)}
+.h-day i{width:100%;max-width:40px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-style:normal;font:700 13px/1 var(--font);background:var(--card2);border:1px solid var(--line);color:var(--dim)}
+.h-day.done i{background:var(--grad);border-color:transparent;color:var(--on-accent);box-shadow:0 6px 16px -6px rgba(var(--acc-rgb),.8)}
+.h-day.rest i{background:rgba(167,139,250,.14);border-color:transparent;color:var(--c-sleep)}
+.h-day.skip i{border-style:dashed}
+.h-day.today{color:var(--text)}
+.h-day.today i{border:2px solid var(--text)}
+.h-water{display:flex;align-items:center;gap:14px}
+.h-water .cups{flex:1;display:grid;grid-template-columns:repeat(var(--n),1fr);gap:4px}
+.h-water .cups button{height:30px;border-radius:8px;border:0;background:var(--card3);cursor:pointer;padding:0;transition:.15s}
+.h-water .cups button.on{background:linear-gradient(180deg,#7dd3fc,#0ea5e9);box-shadow:0 4px 12px -4px rgba(56,189,248,.8)}
+.h-water .cups button:hover{filter:brightness(1.2)}
+.h-wbtn{width:44px;height:44px;border-radius:50%;border:0;background:rgba(56,189,248,.16);color:var(--c-water);font:700 22px/1 var(--font);cursor:pointer;flex:0 0 auto}
+.h-supps{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.h-supps button{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:transparent;font:600 13.5px/1 var(--font);color:var(--text);cursor:pointer}
+.h-supps button.on{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.45);color:var(--good)}
+.h-ask{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 18px;margin-bottom:14px;border-radius:999px;background:var(--surface);border:1px solid var(--line2);box-shadow:var(--shadow)}
+.h-ask:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.h-ask .av{width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:var(--on-accent);flex:0 0 auto}
+.h-ask .av svg{width:18px;height:18px;stroke-width:2.6}
+.h-ask input{flex:1;border:0;background:transparent;min-height:44px;padding:0;box-shadow:none !important;font-size:15.5px}
+.h-ask .send{width:44px;height:44px}
+.h-sugg{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:-4px 0 18px;padding:2px}
+.h-sugg::-webkit-scrollbar{display:none}
+.h-sugg button{flex:0 0 auto;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card2);font:550 13.5px/1 var(--font);color:var(--text);cursor:pointer;white-space:nowrap}
+.h-sugg button:hover{border-color:var(--accent)}
+.h-chal .meter:first-of-type{margin-top:0}
 </style>
 </head>
 <body data-tab="home">
@@ -1870,72 +2142,96 @@ function renderHome(){
   const since=sortedLogs().filter(l=>l.date>=(p.comebackStart||'')&&num(l.weight)!=null);
   const base=since.length?num(since[0].weight):(w||goal);
   let pct=0; if(w){ pct=goal>base?(w-base)/(goal-base):(w>=goal?1:0); } pct=Math.max(0,Math.min(1,pct));
-  const R=56, C=2*Math.PI*R;
   const left=w?Math.max(0,goal-w):null;
-  const name=(p.name||'').trim().split(' ')[0];
+  const name=(p.name||'').trim().split(' ')[0]||((typeof ME!=='undefined'&&ME&&ME.name)?String(ME.name).split(' ')[0]:'');
+  const tl=state.logs.find(l=>l.date===today())||{};
+  // targets (fallback agar age/height nahi)
+  const protT=t?t.protein:Math.round((w||70)*1.8), kcalT=t?t.kcal:null, waterL=t?t.water:3;
+  const prot=num(tl.protein)||0, kc=num(tl.cal)||0;
+  const wGoal=Math.max(8,Math.round(waterL/0.25)), wDone=Math.min(+tl.water||0,30);
+  const days=num(p.days)||4, trained=trainedLast7(), streak=currentStreak(), ago=lastTrainDaysAgo();
+  // rings
+  const rings=[
+    {c:'var(--accent)',v:Math.min(1,trained/days),r:70},
+    {c:'var(--c-prot)',v:Math.min(1,prot/protT),r:53},
+    {c:'var(--c-water)',v:Math.min(1,wDone/wGoal),r:36}
+  ];
+  const ringSvg='<svg viewBox="0 0 168 168" aria-hidden="true">'+rings.map(g=>{ const C=2*Math.PI*g.r;
+    return '<circle class="trk" cx="84" cy="84" r="'+g.r+'" stroke="'+g.c+'" stroke-width="13"/>'
+      +(g.v>0.005?'<circle class="val" cx="84" cy="84" r="'+g.r+'" stroke="'+g.c+'" stroke-width="13" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-g.v)).toFixed(1)+'"/>':''); }).join('')+'</svg>';
   // hafta
   let wk='';
   for(let i=6;i>=0;i--){
     const d=addDays(today(),-i), l=state.logs.find(x=>x.date===d), dow=new Date(d+'T00:00').getDay();
     const cls=l?(isTrain(l)?'done':l.work==='Rest Day'?'rest':l.work==='Skip'?'skip':''):'';
-    const mark=l?(isTrain(l)?'✓':l.work==='Rest Day'?'☾':l.work==='Skip'?'–':'•'):'';
-    wk+='<div class="wd '+cls+(i===0?' today':'')+'"><i>'+mark+'</i>'+DAY_SHORT[dow]+'</div>';
+    const mark=l?(isTrain(l)?'✓':l.work==='Rest Day'?'☾':l.work==='Skip'?'–':'•'):new Date(d+'T00:00').getDate();
+    wk+='<div class="h-day '+cls+(i===0?' today':'')+'"><i>'+mark+'</i>'+DAY_SHORT[dow]+'</div>';
   }
   // aaj ka workout
   const sp=split(p.days), todayRow=sp[(new Date().getDay()+6)%7]||['Aaj',null];
-  const wName=todayRow[1];
-  const ex=wName?(exFor(wName)||[]).slice(0,4):[];
+  const wName=todayRow[1], ex=wName?(exFor(wName)||[]).slice(0,5):[];
   const coachPlan=state.plans.find(x=>x.kind==='workout');
-  const tl=state.logs.find(l=>l.date===today())||{};
   const done=tl.work&&isTrain(tl);
-  // targets
-  const prot=num(tl.protein)||0, kc=num(tl.cal)||0;
-  const pP=t?Math.min(100,prot/t.protein*100):0, kP=t?Math.min(100,kc/t.kcal*100):0;
-  const ago=lastTrainDaysAgo();
+  const msg=ago==null?'Pehla workout log karo, coach wahin se plan banayega.':ago===0?'Aaj ka workout ho gaya. Aise hi chalte raho 🔥':ago===1?'Kal workout kiya tha. Aaj ka din bhi jeeto.':ago+' din se workout nahi hua. Bas aaj wapas aa jao.';
+  const sup=String(p.supps||'').split(',').map(s=>s.trim()).filter(Boolean), have=(tl.supps||[]).map(s=>s.toLowerCase());
+  const c=monthChallenge(), cpct=Math.min(100,Math.round(c.trained/Math.max(1,c.target)*100));
+  const dl=deloadCheck();
+  const dateStr=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+  let cups=''; for(let i=0;i<wGoal;i++) cups+='<button class="'+(i<wDone?'on':'')+'" data-water="'+(i+1)+'" title="'+(i+1)+' glass" aria-label="'+(i+1)+' glass"></button>';
+  const tile=(col,ic,val,unit,lab,attr)=>'<button class="tile" style="--tc:'+col+'" '+attr+'><div class="ic">'+svgI(ic)+'</div><div><b>'+val+(unit?'<small>'+unit+'</small>':'')+'</b><span>'+lab+'</span></div></button>';
+
   out.innerHTML=
-   '<div class="hero">'
-   +'<div class="hello">'+esc(greet())+(name?', '+esc(name):'')+'</div>'
-   +'<div class="bignum"><b'+(w?' data-count="'+esc(String(w))+'"':'')+'>'+(w?esc(String(w)):'--')+'</b><span>kg</span></div>'
-   +'<div class="herobar"><i style="width:'+Math.max(2,Math.round(pct*100))+'%"></i></div>'
-   +'<div class="hero-meta"><span>'+(w?(left>0?esc(left.toFixed(1))+' kg to go':'Goal hit 🏆'):'Weight daalo')+'</span><span>'+Math.round(pct*100)+'% · goal '+goal+' kg</span></div>'
-   +'<p>'+(ago==null?'Aaj ka pehla log daalo, coach wahin se shuru karega.':ago===0?'Aaj ka workout ho gaya. Aise hi chalte raho 🔥':ago===1?'Kal workout kiya tha. Aaj ka din bhi jeeto.':ago+' din se workout log nahi hua. Bas aaj wapas aa jao.')+'</p>'
-   +'<div class="chipline">'+(currentStreak()?'<span class="pill streak">🔥 '+currentStreak()+' din streak</span>':'')+'<span class="pill hot">Week '+ph.wk+' · '+esc(ph.name)+'</span>'+(t?'<span class="pill">~'+t.weeks+' hafte to '+goal+' kg</span>':'')+'</div></div>'
-   +homeBanners()
+   '<div class="h-head"><div><small>'+esc(dateStr)+'</small><h2>'+esc(greet())+(name?', <span>'+esc(name)+'</span>':'')+'</h2></div>'
+   +'<div class="h-chipline hide-m">'+(streak?'<span class="h-chip fire">🔥 '+streak+' din streak</span>':'')+'<span class="h-chip acc">Week '+ph.wk+' · '+esc(ph.name)+'</span></div></div>'
 
-   +'<form class="askbar" data-askform autocomplete="off">'+svgI('search')+'<input name="q" placeholder="Kuch bhi poocho… fitness, padhai, news, paisa, kuch bhi"><button class="send" type="submit" title="Poocho">'+svgI('send')+'</button></form>'
-   +'<div class="card"><h2>'+svgI('fire')+'Ye hafta <span class="muted small" style="margin-left:auto;font-weight:700">'+trainedLast7()+' / '+esc(p.days)+' workouts</span></h2><div class="week">'+wk+'</div></div>'
+   +'<div class="card h-hero">'
+   +'<div class="h-w"><small>Abhi ka weight</small>'
+   +'<div class="h-big"><b'+(w?' data-count="'+esc(String(w))+'"':'')+'>'+(w?esc(String(w)):'--')+'</b><span>kg</span></div>'
+   +'<p class="h-sub">'+(w?(left>0?'<b>'+esc(left.toFixed(1))+' kg</b> aur, phir '+goal+' kg goal':'Goal hit! 🏆'):'Apna weight daalo, safar yahin se shuru')+'</p>'
+   +'<div class="h-prog"><i style="width:'+Math.max(3,Math.round(pct*100))+'%"></i></div>'
+   +'<div class="h-progm"><span>'+esc(String(base||'--'))+' kg</span><b>'+Math.round(pct*100)+'%</b><span>'+goal+' kg</span></div>'
+   +'<p class="h-msg">'+esc(msg)+'</p></div>'
+   +'<div class="h-rings">'+ringSvg+'<div class="h-leg">'
+   +'<div style="--dot:var(--accent)"><span>Workouts</span><b>'+trained+'<small>/ '+days+'</small></b></div>'
+   +'<div style="--dot:var(--c-prot)"><span>Protein</span><b>'+prot+'<small>/ '+protT+' g</small></b></div>'
+   +'<div style="--dot:var(--c-water)"><span>Paani</span><b>'+(wDone*0.25).toFixed(1)+'<small>/ '+waterL+' L</small></b></div>'
+   +'</div></div></div>'
 
-   +'<div class="two">'
-   +'<div class="card"><h2>'+svgI('plan')+'Aaj ka workout</h2>'
-   +(wName?'<p class="wk-name">'+esc(wName)+(done?' <span class="ok small">✓ aaj '+esc(tl.work)+' ho gaya</span>':'')+'</p><p class="muted small" style="margin:0">'+esc(todayRow[0])+' · '+esc(ph.sets)+' sets · '+esc(ph.pct)+' purana weight</p>'
-      +'<ul class="exlist">'+ex.map(e=>'<li>'+esc(e[0])+'<span>'+esc(ph.sets)+'×'+esc(e[1])+'</span></li>').join('')+'</ul>'
-      :'<p class="wk-name">Rest day 😴</p><p class="muted small" style="margin:0">Recovery bhi training hai: 7-8 ghante neend, 8-10k steps, protein poora.</p>')
-   +(coachPlan?'<p class="small" style="margin:12px 0 0">📌 Coach plan: <b>'+esc(coachPlan.title)+'</b></p>':'')
-   +'<div class="row" style="margin-top:14px"><button class="btn small" data-wo="1">'+svgI('play')+(wName?'Workout shuru karo':'Phir bhi workout karo')+'</button><button class="btn ghost small" data-ask="Aaj ka mera workout poore detail me batao, mere saved plan aur phase ke hisaab se.">AI se detail</button></div></div>'
-
-   +'<div class="card"><h2>'+svgI('bolt')+'Aaj ke targets</h2>'
-   +(t?'<div class="meter"><div class="top">Protein<span>'+prot+' / '+t.protein+' g</span></div><div class="bar"><i style="width:'+pP.toFixed(0)+'%"></i></div></div>'
-      +'<div class="meter"><div class="top">Calories<span>'+kc+' / '+t.kcal+'</span></div><div class="bar"><i style="width:'+kP.toFixed(0)+'%"></i></div></div>'
-      +'<div class="meter"><div class="top">Paani<span>~'+t.water+' L</span></div><div class="bar g"><i style="width:100%;opacity:.35"></i></div></div>'
-      :'<p class="muted small">Targets ke liye Profile me <b>age</b> aur <b>height</b> daalo.</p><button class="btn ghost small" data-t="profile">Profile kholo</button>')
-   +'<p class="muted small" style="margin:12px 0 0">Coach ko bolo <i>"aaj 120g protein hua"</i>, bar khud bhar jayega.</p></div>'
+   +'<form class="h-ask" data-askform autocomplete="off"><div class="av">'+svgI('bolt')+'</div><input name="q" placeholder="Coach se kuch bhi poocho…"><button class="send" type="submit" title="Poocho">'+svgI('send')+'</button></form>'
+   +'<div class="h-sugg">'
+   +'<button data-ask="Aaj mujhe kya khana chahiye? Mere bache hue protein aur calories ke hisaab se simple Indian meal batao.">🍛 Aaj kya khaun?</button>'
+   +'<button data-ask="Aaj ka mera workout poore detail me batao, mere phase ke hisaab se.">🏋️ Aaj ka workout</button>'
+   +'<button data-ask="Mere pichle logs dekh ke mera weekly review karo: weight trend, consistency, protein, neend. Kya achha, kya galat, aur agle hafte ke 3 action points.">📊 Weekly review</button>'
+   +'<button data-ask="Muscle memory se 83 kg tak wapas kitna jaldi pahunch sakta hoon? Realistic timeline do.">⏱️ 83 kg kab tak?</button>'
    +'</div>'
 
-   +(function(){
-      const wGoal=t?Math.max(8,Math.round(t.water/0.25)):12, wDone=Math.min(+tl.water||0,30);
-      let gl=''; for(let i=0;i<Math.max(wGoal,wDone);i++) gl+='<button class="gl'+(i<wDone?' on':'')+'" data-water="'+(i+1)+'" title="'+(i+1)+' glass">💧</button>';
-      const sp2=String(p.supps||'').split(',').map(s=>s.trim()).filter(Boolean), have=(tl.supps||[]).map(s=>s.toLowerCase());
-      return '<div class="card"><h2>💧 Paani <span class="muted small" style="margin-left:auto;font-weight:700">'+wDone+' / '+wGoal+' glass · '+(wDone*0.25).toFixed(2)+' L</span></h2>'
-        +'<div class="water">'+gl+'</div>'
-        +'<h3 style="margin:18px 0 8px">💊 Aaj ke supplements</h3><div class="supps">'
-        +(sp2.length?sp2.map(s=>'<button class="schip'+(have.indexOf(s.toLowerCase())>=0?' on':'')+'" data-supp="'+esc(s)+'">'+(have.indexOf(s.toLowerCase())>=0?'✓ ':'')+esc(s)+'</button>').join(''):'<span class="muted small">Profile me apne supplements likho.</span>')
-        +'</div></div>';
-    })()
-   +'<div class="quick">'
-   +'<button class="qa" data-go="coach">'+svgI('chat')+'Coach se baat</button>'
-   +'<button class="qa" data-go="log">'+svgI('plus')+'Quick log</button>'
-   +'<button class="qa" data-ask="Mere pichle logs dekh ke mera weekly review karo: weight trend, consistency, protein/calories, neend. Kya achha hai, kya galat, aur agle hafte ke 3 seedhe action points.">'+svgI('spark')+'Weekly review</button>'
-   +'</div>';
+   +'<div class="h-tiles">'
+   +tile('var(--c-fire)','fire',streak,'din','Streak','data-go="log"')
+   +tile('var(--accent)','plan',trained,'/ '+days,'Is hafte workouts','data-wo="1"')
+   +tile('var(--c-prot)','bolt',prot,'g','Protein aaj','data-go="log"')
+   +tile('var(--c-kcal)','spark',kc||0,kcalT?'/ '+kcalT:'kcal','Calories aaj','data-go="log"')
+   +'</div>'
+
+   +(dl?'<div class="banner">🔄 <b>Deload hafta suggest:</b> '+esc(dl)+'.<br><button class="btn small" data-ask="Mere logs dekh ke is hafte ka deload plan do: kitna weight (%), kitne sets, kya continue karu aur kab normal training pe wapas aana hai.">Deload plan lo</button></div>':'')
+
+   +'<div class="h-grid">'
+   +'<div class="card"><div class="h-cardh"><h3>Aaj ka workout</h3><span>'+esc(todayRow[0])+' · '+esc(ph.sets)+' sets · '+esc(ph.pct)+'</span></div>'
+   +(wName?'<p class="h-wo-name">'+esc(wName)+'</p><p class="h-wo-meta">'+(done?'<span class="ok">✓ Aaj '+esc(tl.work)+' ho gaya</span>':esc(ph.name)+' phase · purane weight ka '+esc(ph.pct))+'</p>'
+      +'<ul class="h-ex">'+ex.map((e,i)=>'<li><i>'+(i+1)+'</i>'+esc(e[0])+'<span>'+esc(ph.sets)+' × '+esc(e[1])+'</span></li>').join('')+'</ul>'
+      :'<p class="h-wo-name">Rest day</p><div class="h-rest"><b>😴</b><p>Recovery bhi training hai: 7-8 ghante neend, 8-10k steps aur protein poora.</p></div>')
+   +(coachPlan?'<p class="small muted" style="margin:14px 0 0">📌 Coach plan: <b style="color:var(--text)">'+esc(coachPlan.title)+'</b></p>':'')
+   +'<div class="row" style="margin-top:18px"><button class="btn" data-wo="1">'+svgI('play')+(wName?'Workout shuru karo':'Phir bhi workout karo')+'</button><button class="btn ghost" data-ask="Aaj ka mera workout poore detail me batao, mere saved plan aur phase ke hisaab se.">AI se detail</button></div></div>'
+
+   +'<div style="display:flex;flex-direction:column;gap:14px">'
+   +'<div class="card" style="margin:0"><div class="h-cardh"><h3>Ye hafta</h3><span>'+trained+' / '+days+' workouts</span></div><div class="h-week">'+wk+'</div></div>'
+   +'<div class="card h-chal" style="margin:0"><div class="h-cardh"><h3>'+esc(c.name)+' challenge</h3><span>Din '+c.day+'/'+c.dim+'</span></div>'
+   +'<div class="meter"><div class="top">Workouts<span>'+c.trained+' / '+c.target+'</span></div><div class="bar"><i style="width:'+Math.max(2,cpct)+'%"></i></div></div>'
+   +'<div class="meter"><div class="top">Roz ka log<span>'+c.logged+' / '+c.day+'</span></div><div class="bar g"><i style="width:'+Math.max(2,Math.min(100,Math.round(c.logged/Math.max(1,c.day)*100)))+'%"></i></div></div></div>'
+   +'</div></div>'
+
+   +'<div class="card"><div class="h-cardh"><h3>💧 Paani</h3><span>'+wDone+' / '+wGoal+' glass · '+(wDone*0.25).toFixed(1)+' L</span></div>'
+   +'<div class="h-water"><div class="cups" style="--n:'+wGoal+'">'+cups+'</div><button class="h-wbtn" data-water="'+Math.min(30,wDone+1)+'" title="1 glass add">+</button></div>'
+   +'<div class="h-supps">'+(sup.length?sup.map(s=>{ const on=have.indexOf(s.toLowerCase())>=0; return '<button class="'+(on?'on':'')+'" data-supp="'+esc(s)+'">'+(on?'✓':'○')+' '+esc(s)+'</button>'; }).join(''):'<span class="muted small">Profile me apne supplements likho.</span>')+'</div></div>';
   if($('#home').classList.contains('on')) countUps(out);
 }
 function renderAll(){renderData();renderChat();}
@@ -2682,7 +2978,7 @@ if(!state.settings.onboarded && !state.profile.name && !state.logs.length && !st
 fillLogForm(today());
 renderAll();
 let startTab='home'; try{startTab=localStorage.getItem(LS+'.tab')||'home';}catch(e){}
-if(!state.settings.key && !state.profile.height) startTab='profile';
+if(!aiKey() && !state.profile.height && !state.profile.current) startTab='profile';
 showTab(startTab);
 setTimeout(()=>{ const s=$('#splash'); if(s){ s.classList.add('gone'); setTimeout(()=>s.remove(),600); } },500);
 };
