@@ -764,6 +764,45 @@ input,select,textarea{border-radius:12px;background:var(--card2);border-color:va
 .h-brief-body li{font:500 14.5px/1.5 var(--font)}
 .h-brief-body p{margin:4px 0}
 .h-brief .btn[disabled]{opacity:.6}
+.sk-tgs{display:flex;gap:10px;align-items:center}
+.sk-tg{flex:1;height:46px;border-radius:14px;border:1px solid var(--line2);background:var(--card2);font:650 14.5px/1.2 var(--font);color:var(--text);cursor:pointer;transition:.15s}
+.sk-tg.big{height:auto;padding:14px 8px;font-size:17px}
+.sk-tg.big span{font:500 12.5px/1.3 var(--font);color:var(--muted)}
+.sk-tg.on{background:linear-gradient(135deg,#f472b6,#a78bfa);color:#fff;border-color:transparent;box-shadow:0 8px 22px -8px rgba(244,114,182,.8)}
+.sk-tg.on span{color:rgba(255,255,255,.85)}
+.sk-hero{display:grid;grid-template-columns:1fr 1.1fr;gap:22px;align-items:center;background:linear-gradient(150deg,rgba(244,114,182,.14),transparent 55%),var(--surface)}
+@media (max-width:760px){.sk-hero{grid-template-columns:1fr}}
+.sk-score small,.sk-today small{font:550 13px/1 var(--font);color:var(--muted)}
+.sk-score b{display:block;font:800 72px/1 var(--num);letter-spacing:-.05em;margin:8px 0 4px}
+.sk-score b span{font:600 22px/1 var(--font);color:var(--muted);letter-spacing:0;margin-left:4px}
+.sk-score p{margin:0;font:500 14px/1.4 var(--font);color:var(--muted)}
+.sk-today .sk-tgs{margin:10px 0 14px}
+.sk-dots{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;margin-bottom:8px}
+.sk-dots i{aspect-ratio:1;border-radius:50%;background:var(--card3)}
+.sk-dots i.half{background:linear-gradient(90deg,#f472b6 50%,var(--card3) 50%)}
+.sk-dots i.full{background:linear-gradient(135deg,#f472b6,#a78bfa)}
+.sk-dots i.today{outline:2px solid var(--text);outline-offset:1px}
+.sk-last{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.sk-last img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #f472b6}
+.sk-last p{margin:4px 0 0;font:500 13.5px/1.45 var(--font);color:var(--muted)}
+.sk-bars{display:flex;flex-direction:column;gap:9px}
+.sk-bar{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;font:550 13px/1.2 var(--font)}
+.sk-bar div{height:8px;border-radius:99px;background:var(--card3);overflow:hidden}
+.sk-bar i{display:block;height:100%;border-radius:99px}
+.sk-bar b{font:700 14px/1 var(--num);text-align:right}
+.sk-bar b small{margin-left:3px;font-size:11px}
+@media (max-width:480px){.sk-bar{grid-template-columns:104px 1fr 40px}}
+.sk-h{margin:14px 0 6px;font:650 13.5px/1.2 var(--font);color:var(--muted)}
+.sk-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.sk-steps li{font:500 14px/1.4 var(--font)}
+.sk-steps li b{display:block;font-weight:650}
+.sk-steps li span{display:block;font-size:13px;color:#f472b6}
+.sk-steps li small{display:block;font-size:12.5px;color:var(--muted)}
+.sk-concerns{display:flex;flex-wrap:wrap;gap:8px}
+.sk-concerns button{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:transparent;font:550 13.5px/1 var(--font);color:var(--text);cursor:pointer}
+.sk-concerns button.on{background:rgba(244,114,182,.16);border-color:rgba(244,114,182,.6);color:#f472b6}
+.sk-tips{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;font:500 14px/1.45 var(--font)}
+.sk-home{background:linear-gradient(150deg,rgba(244,114,182,.10),transparent 50%),var(--surface)}
 </style>
 </head>
 <body data-tab="home">
@@ -851,6 +890,7 @@ input,select,textarea{border-radius:12px;background:var(--card2);border-color:va
     <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
     <symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.7 7-7 0-4-3-6-4-10-2 2-3 4-3 6-1-1-2-2-2.5-4C7 9 5 11.5 5 15c0 4.3 3 7 7 7z"/></symbol>
+    <symbol id="i-skin" viewBox="0 0 24 24"><circle cx="11" cy="13" r="8"/><path d="M8 11.5h.01M14 11.5h.01M8.5 15.5c1.4 1.1 3.6 1.1 5 0"/><path d="M19.5 1.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/></symbol>
   </defs>
 </svg>
 
@@ -870,6 +910,7 @@ input,select,textarea{border-radius:12px;background:var(--card2);border-color:va
     <button data-t="log"><svg class="i"><use href="#i-log"/></svg>Log</button>
     <button data-t="progress"><svg class="i"><use href="#i-chart"/></svg>Progress</button>
     <button data-t="plan"><svg class="i"><use href="#i-plan"/></svg>Plan</button>
+    <button data-t="skin"><svg class="i"><use href="#i-skin"/></svg>Skin</button>
   </nav>
 </header>
 
@@ -1010,6 +1051,13 @@ input,select,textarea{border-radius:12px;background:var(--card2);border-color:va
     <div id="planOut"></div>
   </section>
 
+  <!-- SKIN -->
+  <section id="skin">
+    <div class="page-h"><div><h2>Skin care</h2><p>AI skin coach: selfie scan, AM/PM routine aur roz ka check-in.</p></div></div>
+    <div id="skinOut"></div>
+    <input type="file" id="skinIn" accept="image/*" hidden>
+  </section>
+
   <!-- PROFILE -->
   <section id="profile">
     <div class="page-h"><div><h2>Profile & settings</h2><p>Jitna sahi data, utna sahi coach.</p></div></div>
@@ -1128,7 +1176,10 @@ input,select,textarea{border-radius:12px;background:var(--card2);border-color:va
       <button data-act="photo"><b>📷</b>Khane ki photo</button>
       <button data-act="food"><b>🍛</b>Khana add</button>
       <button data-act="ask"><b>💬</b>Coach se poocho</button>
-      <button data-act="review"><b>✨</b>Weekly review</button>
+      <button data-act="review"><b>📊</b>Weekly review</button>
+      <button data-act="skin"><b>✨</b>Skin care</button>
+      <button data-act="skinscan"><b>🤳</b>Skin scan</button>
+      <button data-act="skinprod"><b>🧴</b>Product check</button>
     </div>
   </div>
 </div>
@@ -1270,7 +1321,8 @@ function normalize(s){
     threadNames:(s.threadNames&&typeof s.threadNames==='object')?s.threadNames:{main:'Fitness'},
     trash:(s.trash&&typeof s.trash==='object')?s.trash:{},
     brief:(s.brief&&typeof s.brief==='object')?s.brief:{},
-    chatSummary:(s.chatSummary&&typeof s.chatSummary==='object')?s.chatSummary:{}
+    chatSummary:(s.chatSummary&&typeof s.chatSummary==='object')?s.chatSummary:{},
+    skin:(s.skin&&typeof s.skin==='object')?s.skin:{profile:{},routine:null,days:{},scans:[]}
   };
 }
 function load(){
@@ -1295,6 +1347,7 @@ function cloudCopy(){
   c.sessions=(c.sessions||[]).slice(-200);
   Object.keys(c.trash||{}).forEach(k=>{ const t=c.trash[k]; if(t.at&&t.at<addDays(today(),-30)) delete c.trash[k]; else t.msgs=(t.msgs||[]).slice(-30).map(m=>{ const x=Object.assign({},m); delete x.thumb; return x; }); });
   Object.keys(c.threads||{}).forEach(k=>{ c.threads[k]=(c.threads[k]||[]).slice(-30).map(m=>{ const x=Object.assign({},m); delete x.thumb; return x; }); });
+  if(c.skin&&c.skin.days) Object.keys(c.skin.days).forEach(d=>{ if(d<addDays(today(),-150)) delete c.skin.days[d]; });
   while(JSON.stringify(c).length>350000 && c.chat.length) c.chat.shift();
   return c;
 }
@@ -1564,6 +1617,8 @@ PHOTO
 - User photo bheje to dhyan se dekho:
   - Khana: har item ka andaaza (quantity, calories, protein) table me do, phir log_food se har item save karo (din ke total me khud judta hai).
   - Body/physique: imaandaar aur respectful feedback (kya achha hai, kya improve karna hai, kaunsi body part weak hai).
+  - Face ki selfie / skin ki photo: SKIN SCAN karo (neeche SKIN CARE EXPERT ke rules), save_skin_scan + update_skin_profile chalao.
+  - Skin product ka label/ingredients: skin type ke hisaab se batao suit karega ya nahi, kaunse ingredient achhe/kharab, aur routine me kab lagana.
   - Exercise form, gym machine, supplement label ya koi bhi photo: samjhao aur practical salah do.
 VIDEO (exercise form check)
 - User exercise ka video bheje to elite coach ki tarah rep-by-rep dekho: setup/stance, range of motion, tempo, bar/dumbbell path, kohni-ghutne-kamar ki position, saans/bracing.
@@ -1588,6 +1643,7 @@ APP KE TOOLS (bahut zaroori)
 - HATANA / DELETE: user jab bhi kuch hatane, delete, saaf, remove ya "galat add ho gaya" bole (grocery list, plan, khana, workout, naap, paani, supplement, yaad, chat) to delete_data call karo. Grocery me kuch items jodne/hatane/kharida mark karne ke liye update_grocery. Purana din ka poora log hatana ho to delete_log. Theme/rang badalna ho to update_settings.
 - SELF-CHECK: plan, calories, macros, totals ya koi bhi math wala jawab bhejne se pehle khud double-check karo (items jod ke total match karo, protein/kcal realistic hon). Galti mile to theek karke hi bhejo.
 - BADE KAAM: user ek message me kai kaam bole (plan banao + save karo + grocery bhi) to sab tools ek ke baad ek chalao jab tak poora na ho.
+- SKIN: skin type/problems → update_skin_profile; routine banao → save_skin_routine; "AM/PM ho gaya", pimple, skin ka haal → log_skin; selfie scan → save_skin_scan.
 - KABHI JHOOTH MAT BOLO: jab tak tool call karke {ok:true} na mile, mat bolo "kar diya / hata diya / save ho gaya". Tool error de to user ko saaf batao kya nahi hua aur kyun.
 - Ek message me kai cheezein hon to saare tools ek saath chalao.
 - Tool ke baad 1 line me batao kya save kiya, phir coach wali salah do (jaise aaj ke log pe chhota feedback).
@@ -1600,6 +1656,8 @@ SAFETY (zaroori)
 - Chest pain, chakkar, tez joint pain, numbness, ya koi medical condition ho to training rok ke doctor/physio se milne ko kaho.
 
 ${COACH_KB}
+
+${SKIN_KB}
 
 USER KI JAANKARI
 - Naam: ${p.name||'pata nahi'} | Age: ${p.age||'pata nahi'} | Height: ${p.height?p.height+' cm':'pata nahi'} | Gender: ${p.sex}
@@ -1615,6 +1673,9 @@ ABHI KI STATUS (aaj ${today()})
 - Deload signal: ${deloadCheck()||'nahi'} | Ye chat: ${state.threadNames[state.activeThread]||'Fitness'}
 - Workout plan banao to save_plan me workout_days (har din ki exercises, sets, reps) zaroor bhejo, taaki Workout mode usi plan se chale.
 - ${t?`App ka estimate: maintenance ~${t.tdee} kcal, bulk target ${t.kcal} kcal, protein ${t.protein}g, fat ${t.fat}g, carbs ${t.carbs}g, paani ~${t.water} L. Goal tak ~${t.weeks} hafte (${t.eta}).`:'Calorie targets ke liye height/age missing hai.'}
+
+SKIN DATA
+${skinCtx()}
 
 COACH ANALYTICS (app ne tumhare liye data se nikaala, isko use karo)
 ${coachAnalytics()}
@@ -1705,7 +1766,7 @@ const TOOLS=[{functionDeclarations:[
    parameters:{type:'object',properties:{date:{type:'string',description:'YYYY-MM-DD'}},required:['date']}},
   {name:'delete_data',description:'App se koi bhi cheez HATAO / DELETE / SAAF karo jab user bole: grocery list, plan, khana (meal), workout session, body naap, paani, supplement tick, yaad rakhi baatein, chat. Jab bhi user "hata do", "delete karo", "saaf karo", "remove", "galat add hua" bole, ye tool zaroor call karo.',
    parameters:{type:'object',properties:{
-     what:{type:'string',enum:['grocery','plan','meal','workout','measurements','water','supplement','memory','chat'],description:'grocery = poori grocery list ya kuch items; plan = saved plan; meal = khaya hua khana item; workout = workout session; measurements = body naap; water = paani reset; supplement = supplement ka tick hatao; memory = saari yaad; chat = abhi wali chat saaf'},
+     what:{type:'string',enum:['grocery','plan','meal','workout','measurements','water','supplement','memory','chat','skin_routine','skin_scan'],description:'grocery = poori grocery list ya kuch items; plan = saved plan; meal = khaya hua khana item; workout = workout session; measurements = body naap; water = paani reset; supplement = supplement ka tick hatao; memory = saari yaad; chat = abhi wali chat saaf'},
      match:{type:'string',description:'Kis cheez ko hatana hai uska naam/hissa (jaise "paneer", "Push day plan", "Creatine"). Khaali chhodo agar sab hatana hai.'},
      date:{type:'string',description:'YYYY-MM-DD (meal/workout/measurements/water/supplement ke liye). Default aaj.'},
      all:{type:'boolean',description:'true = us type ka SAB kuch hatao (jaise poori grocery list, saare plans)'}},
@@ -1724,6 +1785,14 @@ const TOOLS=[{functionDeclarations:[
    parameters:{type:'object',properties:{type:{type:'string',enum:['logs','exercise','workouts','meals','measurements']},from:{type:'string',description:'YYYY-MM-DD'},to:{type:'string',description:'YYYY-MM-DD, default aaj'},exercise:{type:'string',description:'type=exercise ho to exercise ka naam'}},required:['type']}},
   {name:'set_targets',description:'Roz ke calorie, protein ya paani target ko custom set karo (jab user bole, ya analytics ke hisaab se calories adjust karni ho). reset=true se app ke automatic target wapas.',
    parameters:{type:'object',properties:{kcal:{type:'number'},protein:{type:'number',description:'grams'},water:{type:'number',description:'litre'},reset:{type:'boolean'}}}},
+  {name:'update_skin_profile',description:'User ki skin profile save/update karo: skin type, problems, sensitivity, budget, abhi ke products.',
+   parameters:{type:'object',properties:{type:{type:'string',enum:['oily','dry','combination','normal','sensitive']},concerns:{type:'array',items:{type:'string'}},sensitivity:{type:'string',enum:['low','medium','high']},budget:{type:'string'},products:{type:'string'},notes:{type:'string'}}}},
+  {name:'save_skin_routine',description:'AM/PM skin care routine save karo taaki Skin tab me dikhe. Har step me kya lagana (step), example product (India me milne wala), aur kaise (how).',
+   parameters:{type:'object',properties:{title:{type:'string'},am:{type:'array',items:{type:'object',properties:{step:{type:'string'},product:{type:'string'},how:{type:'string'}},required:['step']}},pm:{type:'array',items:{type:'object',properties:{step:{type:'string'},product:{type:'string'},how:{type:'string'}},required:['step']}},weekly:{type:'array',items:{type:'object',properties:{step:{type:'string'},product:{type:'string'},how:{type:'string'}},required:['step']}},notes:{type:'string'}},required:['am','pm']}},
+  {name:'log_skin',description:'Skin ka roz ka check-in: AM/PM routine ki ya nahi, breakout (naya pimple) hua ya nahi, note.',
+   parameters:{type:'object',properties:{date:{type:'string'},am:{type:'boolean'},pm:{type:'boolean'},breakout:{type:'boolean'},note:{type:'string'}}}},
+  {name:'save_skin_scan',description:'Face selfie ke AI skin scan ke scores save karo. Severity 0-10 (0 = koi problem nahi, 10 = bahut zyada). overall = skin health 0-10 (10 = best).',
+   parameters:{type:'object',properties:{skin_type:{type:'string'},overall:{type:'number'},acne:{type:'number'},pigmentation:{type:'number'},oiliness:{type:'number'},dryness:{type:'number'},texture:{type:'number'},dark_circles:{type:'number'},redness:{type:'number'},summary:{type:'string',description:'1-2 line saar'}},required:['overall']}},
   {name:'log_workout',description:'Gym workout ka POORA detail save karo: har exercise aur uska har set (weight kg + reps). Jab bhi user sets/reps/weight bataye ya workout paste kare, ye call karo. "3x8 @ 60kg" ko 3 alag set objects me likho. PR app khud nikaal lega.',
    parameters:{type:'object',properties:{
      date:{type:'string',description:'YYYY-MM-DD, default aaj'},
@@ -1949,6 +2018,10 @@ async function runTool(name,a){
     }else if(what==='memory'){
       const before=state.memory.length; state.memory=all?[]:state.memory.filter(m=>!has(m.text)); n=before-state.memory.length;
       if(!n) return {ok:false,error:'Aisi koi baat yaad nahi thi'}; summary='🧹 '+n+' yaad rakhi baat hatayi';
+    }else if(what==='skin_routine'){
+      const S=skinState(); if(!S.routine) return {ok:false,error:'Koi skin routine save nahi hai'}; S.routine=null; summary='🗑️ Skin routine hata di';
+    }else if(what==='skin_scan'){
+      const S=skinState(); if(!S.scans.length) return {ok:false,error:'Koi scan nahi hai'}; n=a.all?S.scans.length:1; S.scans=a.all?[]:S.scans.slice(0,-1); summary='🗑️ '+n+' skin scan hataya';
     }else if(what==='chat'){
       setTimeout(()=>{ state.chat=state.chat.slice(-2); save(); renderChat(); },400); summary='🧹 Chat saaf kar di';
     }else return {ok:false,error:'Unknown what'};
@@ -1969,6 +2042,34 @@ async function runTool(name,a){
     if(['volt','orange','blue','green','purple','red'].indexOf(a.accent)>=0){ state.settings.accent=a.accent; bits.push('rang '+a.accent); }
     if(!bits.length) return {ok:false,error:'Kuch nahi badla'};
     applyTheme(); summary='🎨 Look badla: '+bits.join(', ');
+  }else if(name==='update_skin_profile'){
+    const S=skinState(), bits=[];
+    ['type','sensitivity','budget','products','notes'].forEach(k=>{ if(a[k]){ S.profile[k]=String(a[k]); bits.push(k+': '+a[k]); } });
+    if(Array.isArray(a.concerns)&&a.concerns.length){ S.profile.concerns=a.concerns.map(String).slice(0,12); bits.push('problems: '+S.profile.concerns.join(', ')); }
+    if(!bits.length) return {ok:false,error:'Kuch nahi mila'};
+    summary='✨ Skin profile: '+bits.join(' · ');
+  }else if(name==='save_skin_routine'){
+    const S=skinState(), m=x=>(Array.isArray(x)?x:[]).filter(t=>t&&(t.step||t.product)).map(t=>({step:String(t.step||t.product),product:String(t.product||''),how:String(t.how||'')}));
+    const r={title:String(a.title||'Meri skin routine'),am:m(a.am),pm:m(a.pm),weekly:m(a.weekly),notes:String(a.notes||''),date:today()};
+    if(!r.am.length&&!r.pm.length) return {ok:false,error:'AM/PM steps khaali'};
+    S.routine=r; summary='🧴 Skin routine save: subah '+r.am.length+' step, raat '+r.pm.length+' step (Skin tab me)';
+  }else if(name==='log_skin'){
+    const S=skinState(), d=validDate(a.date), x=S.days[d]=S.days[d]||{}, bits=[];
+    if(typeof a.am==='boolean'){ x.am=a.am; bits.push('AM '+(a.am?'✓':'✗')); }
+    if(typeof a.pm==='boolean'){ x.pm=a.pm; bits.push('PM '+(a.pm?'✓':'✗')); }
+    if(typeof a.breakout==='boolean'){ x.breakout=a.breakout; bits.push(a.breakout?'naya pimple':'skin clear'); }
+    if(a.note){ x.note=x.note?x.note+' | '+a.note:String(a.note); bits.push('note'); }
+    if(!bits.length) return {ok:false,error:'Kuch nahi mila'};
+    summary='✨ Skin log '+niceDate(d)+': '+bits.join(', ');
+  }else if(name==='save_skin_scan'){
+    const S=skinState(), sc={};
+    ['acne','pigmentation','oiliness','dryness','texture','dark_circles','redness'].forEach(q=>{ if(a[q]!=null&&isFinite(a[q])) sc[q]=Math.max(0,Math.min(10,Math.round(+a[q]*10)/10)); });
+    const ov=Math.max(0,Math.min(10,Math.round((+a.overall||0)*10)/10));
+    if(!ov&&!Object.keys(sc).length) return {ok:false,error:'scores khaali'};
+    S.scans.push({date:today(),overall:ov,scores:sc,type:String(a.skin_type||''),summary:String(a.summary||'').slice(0,400),thumb:(lastImg&&lastImg.thumb)||''});
+    S.scans=S.scans.slice(-12); S.scans.forEach((x,i)=>{ if(i<S.scans.length-6) delete x.thumb; });
+    if(a.skin_type&&!S.profile.type){ const t=String(a.skin_type).toLowerCase(); const k=['oily','dry','combination','normal','sensitive'].find(v=>t.indexOf(v)>=0); if(k) S.profile.type=k; }
+    summary='📸 Skin scan save: overall '+ov+'/10 (Skin tab me)';
   }else if(name==='get_history'){
     const to=validDate(a.to), from=/^\d{4}-\d{2}-\d{2}$/.test(a.from||'')?a.from:addDays(to,-30), inR=d=>d>=from&&d<=to;
     let rows=[];
@@ -2016,7 +2117,7 @@ async function callGemini(messages,onChunk,onAction,image){
   catch(e){ throw new Error('API key check nahi hui: '+e.message); }
   if(!state.settings.brainv2){ state.settings.brainv2=true; try{ await ensureModel(key,true); }catch(e){} }
   const lastU=(messages.filter(m=>m.role==='user').pop()||{}).text||'';
-  HEAVY=!!image||lastU.length>350||/plan|program|routine|review|analy|report|kyun|kyu |why|explain|samjha|compare|strategy|plateau|stuck|progress|diet|meal|split|cut|bulk|injury|dard|calculate|hisaab/i.test(lastU);
+  HEAVY=!!image||lastU.length>350||/skin|acne|pimple|daag|tan|routine|sunscreen|plan|program|routine|review|analy|report|kyun|kyu |why|explain|samjha|compare|strategy|plateau|stuck|progress|diet|meal|split|cut|bulk|injury|dard|calculate|hisaab/i.test(lastU);
   const contents=toContents(messages);
   if(image&&contents.length){ const lc=contents[contents.length-1]; if(lc.role==='user') lc.parts.push({inlineData:{mimeType:image.mime,data:image.data}}); }
   // BEAST_V4: bade sawaal → Pro model, limit/busy ho to tez model
@@ -2223,7 +2324,7 @@ function renderChat(){
 }
 let busy=false;
 async function sendChat(text){
-  const img=pendingImg;
+  const img=pendingImg; lastImg=img||null;
   text=(text||'').trim(); if((!text&&!img)||busy) return;
   if(!text) text=img&&img.video?'Is video me meri exercise form rep-by-rep check karo: galtiyan, cues, aur safety rating do.':'Is photo ko dhyan se dekho aur detail me batao.';
   if(!aiKey()){showTab('profile');$('#keyMsg').innerHTML='<span class="no">Pehle API key daalo.</span>';return;}
@@ -2327,6 +2428,101 @@ async function maybeSummarize(){
   }catch(e){}
   sumBusy=false;
 }
+
+/* ================= SKIN CARE (AI skin coach) ================= */
+let lastImg=null;
+const SKIN_CONCERNS=['Acne / pimples','Acne marks','Dark spots','Tanning','Oily skin','Dry skin','Open pores','Blackheads','Dark circles','Dullness','Redness','Razor bumps'];
+const SKIN_SCORES=[['acne','Acne'],['pigmentation','Pigmentation / daag'],['oiliness','Oiliness'],['dryness','Dryness'],['texture','Texture / pores'],['dark_circles','Dark circles'],['redness','Redness']];
+const SKIN_KB=`SKIN CARE EXPERT (dermatology-informed skin coach ho, doctor nahi)
+- Basic routine: AM = gentle cleanser → serum (niacinamide 5-10% ya vitamin C 10-15%) → moisturizer → sunscreen SPF 50 PA+++/++++ (2 finger rule, bahar ho to 2-3 ghante me dobara). PM = cleanser (sunscreen lagaya tha to double cleanse) → active (alternate raat) → moisturizer.
+- Actives: salicylic acid 1-2% (oily, blackheads, acne); benzoyl peroxide 2.5% (laal/pus wale pimples, spot ya face wash); azelaic acid 10% (acne marks, pigmentation, redness, safe); niacinamide (oil, pores, marks); vitamin C subah (dullness, tanning); retinol 0.2-0.5% raat ko hafte me 2-3 baar se shuru (texture, marks, anti-aging); adapalene 0.1% acne ke liye bahut effective hai par India me dermatologist se lo; AHA (glycolic/lactic) hafte me 1-2 baar; ceramides/hyaluronic acid dryness ke liye.
+- Ek hi raat me mat milao: retinoid + AHA/BHA; retinol + benzoyl peroxide. Naya product: 48 ghante patch test, ek time pe ek hi naya active, result 6-12 hafte me.
+- Gym walo ke liye: workout ke 15-30 min me face wash (sweat acne), towel/cap/helmet/pillow cover saaf, phone screen saaf. Whey (dairy) se kuch logon ko acne badhta hai: ho to whey isolate ya plant protein try karo. Creatine se acne ka strong evidence nahi. High sugar diet aur kam neend acne badhate hain.
+- Razor bumps: naya blade, baal ki direction me shave, BHA. Dark circles: neend, sunscreen, caffeine/niacinamide eye cream (asar thoda), genetics bhi.
+- India me budget products (budget ke hisaab se 1-2 example): Minimalist, Re'equil, Deconstruct, Cetaphil/Simple, CeraVe, La Shield, Neutrogena Ultra Sheer, Aqualogica, Plum, Fixderma Salyzap, Benzac AC 2.5%.
+- SAFETY: kabhi steroid creams (Betnovate, Panderm, Skin Shine, triple-combination fairness creams) suggest mat karo, India me inka bahut galat use hota hai aur skin kharab hoti hai. Fairness creams aur DIY (nimbu, toothpaste, baking soda) mat batao. Cystic/gaanth wale acne, scars, achanak rash, mole ka badalna → dermatologist. Isotretinoin sirf dermatologist.
+- SKIN SCAN: user face ki selfie bheje to: skin type, har concern ki severity 0-10 (0 = koi problem nahi, 10 = bahut zyada), overall skin health 0-10 (10 = best). Pichle scan se compare karo. save_skin_scan se save karo, update_skin_profile se type/concerns, phir top 3 problems + simple AM/PM fix. Photo blurry/filter/kam light ho to dobara lene ko bolo (natural light, bina filter).
+- Routine banao to save_skin_routine se save karo (har step: kya lagana, example product, kaise). User bole "AM/PM routine kar li" ya "pimple nikla" to log_skin.`;
+
+function skinState(){ if(!state.skin||typeof state.skin!=='object') state.skin={profile:{},routine:null,days:{},scans:[]}; const S=state.skin; S.profile=S.profile||{}; S.days=S.days||{}; S.scans=Array.isArray(S.scans)?S.scans:[]; return S; }
+function skinStreak(){ const S=skinState(), ok=x=>x&&x.am&&x.pm; let d=today(), n=0; if(!ok(S.days[d])) d=addDays(d,-1); while(ok(S.days[d])&&n<999){ n++; d=addDays(d,-1); } return n; }
+function skinCtx(){
+  const S=skinState(), P=S.profile, last=S.scans[S.scans.length-1];
+  let done=0, half=0; for(let i=0;i<7;i++){ const x=S.days[addDays(today(),-i)]; if(x&&x.am&&x.pm) done++; else if(x&&(x.am||x.pm)) half++; }
+  const R=S.routine;
+  return '- Skin type: '+(P.type||'pata nahi')+' | Sensitivity: '+(P.sensitivity||'-')+' | Budget: '+(P.budget||'-')+' | Concerns: '+((P.concerns||[]).join(', ')||'-')
+    +'\n- Abhi ke products: '+(P.products||'nahi bataya')+(P.notes?' | Note: '+P.notes:'')
+    +'\n- Routine: '+(R?('"'+R.title+'" AM: '+R.am.map(s=>s.step).join(' → ')+' | PM: '+R.pm.map(s=>s.step).join(' → ')+(R.weekly.length?' | Weekly: '+R.weekly.map(s=>s.step).join(', '):'')):'abhi save nahi')
+    +'\n- Pichle 7 din: '+done+' din AM+PM dono, '+half+' din aadha | Skin streak '+skinStreak()+' din | Aaj: AM '+((S.days[today()]||{}).am?'✓':'✗')+', PM '+((S.days[today()]||{}).pm?'✓':'✗')
+    +'\n- Aakhri skin scan: '+(last?(last.date+' overall '+last.overall+'/10, '+Object.keys(last.scores||{}).map(k=>k+' '+last.scores[k]).join(', ')+(S.scans.length>1?' | pehle wala overall '+S.scans[S.scans.length-2].overall+'/10':'')):'koi scan nahi');
+}
+function skinHomeHtml(){
+  const S=skinState(), td=S.days[today()]||{}, last=S.scans[S.scans.length-1];
+  return '<div class="card sk-home"><div class="h-cardh"><h3>✨ Skin care</h3><span>'+(last?'Score '+last.overall+'/10 · ':'')+skinStreak()+' din streak</span></div>'
+   +'<div class="sk-tgs"><button class="sk-tg'+(td.am?' on':'')+'" data-skin="am">☀️ AM routine '+(td.am?'✓':'')+'</button><button class="sk-tg'+(td.pm?' on':'')+'" data-skin="pm">🌙 PM routine '+(td.pm?'✓':'')+'</button><button class="btn ghost small" data-t="skin">Open</button></div></div>';
+}
+function sevCol(v){ return v<=3?'#22c55e':v<=6?'#f59e0b':'#f43f5e'; }
+function renderSkin(){
+  const out=$('#skinOut'); if(!out) return;
+  const S=skinState(), P=S.profile, td=S.days[today()]||{}, last=S.scans[S.scans.length-1], prev=S.scans.length>1?S.scans[S.scans.length-2]:null, R=S.routine;
+  let dots=''; for(let i=13;i>=0;i--){ const d=addDays(today(),-i), x=S.days[d]||{}; dots+='<i class="'+(x.am&&x.pm?'full':(x.am||x.pm)?'half':'')+(i===0?' today':'')+'" title="'+esc(niceDate(d))+'"></i>'; }
+  const stepList=(arr,ic)=>arr.length?'<ol class="sk-steps">'+arr.map(s=>'<li><b>'+esc(s.step)+'</b>'+(s.product?'<span>'+esc(s.product)+'</span>':'')+(s.how?'<small>'+esc(s.how)+'</small>':'')+'</li>').join('')+'</ol>':'<p class="muted small">Koi step nahi.</p>';
+  out.innerHTML=
+   '<div class="card sk-hero"><div class="sk-score"><small>Skin score</small><b>'+(last?esc(String(last.overall)):'--')+'<span>/10</span></b>'
+   +'<p>'+(last?('Aakhri scan '+esc(niceDate(last.date))+(prev?' · '+(last.overall>=prev.overall?'▲ +':'▼ ')+(Math.round((last.overall-prev.overall)*10)/10)+' pichle se':'')):'Pehla AI scan karo, score yahan aayega')+'</p>'
+   +'<div class="h-chipline" style="margin-top:12px"><span class="h-chip">'+esc(P.type?('Type: '+P.type):'Type: pata nahi')+'</span><span class="h-chip fire">🔥 '+skinStreak()+' din streak</span></div></div>'
+   +'<div class="sk-today"><small>Aaj ka check-in</small><div class="sk-tgs"><button class="sk-tg big'+(td.am?' on':'')+'" data-skin="am">☀️ AM<br><span>'+(td.am?'Ho gaya ✓':'Tap karo')+'</span></button><button class="sk-tg big'+(td.pm?' on':'')+'" data-skin="pm">🌙 PM<br><span>'+(td.pm?'Ho gaya ✓':'Tap karo')+'</span></button></div>'
+   +'<div class="sk-dots">'+dots+'</div><small class="muted">Pichle 14 din · pura = AM+PM dono</small></div></div>'
+
+   +'<div class="h-grid">'
+   +'<div class="card"><div class="h-cardh"><h3>📸 AI skin scan</h3><span>'+S.scans.length+' scans</span></div>'
+   +(last?'<div class="sk-last">'+(last.thumb?'<img src="'+esc(last.thumb)+'" alt="">':'')+'<div><b>'+esc(niceDate(last.date))+'</b><p>'+esc(last.summary||'')+'</p></div></div>'
+      +'<div class="sk-bars">'+SKIN_SCORES.filter(([k])=>last.scores&&last.scores[k]!=null).map(([k,lab])=>{ const v=last.scores[k], pv=prev&&prev.scores?prev.scores[k]:null; return '<div class="sk-bar"><span>'+lab+'</span><div><i style="width:'+Math.max(4,v*10)+'%;background:'+sevCol(v)+'"></i></div><b>'+v+(pv!=null&&pv!==v?'<small class="'+(v<pv?'ok':'no')+'">'+(v<pv?'▼':'▲')+'</small>':'')+'</b></div>'; }).join('')+'</div>'
+      +'<p class="muted small" style="margin:10px 0 0">0 = koi problem nahi · 10 = bahut zyada</p>'
+      :'<p class="muted small" style="margin:0 0 4px">Natural light me, bina filter aur makeup ke, seedhi selfie lo. Coach skin type, har problem ka score aur routine batayega.</p>')
+   +'<div class="row" style="margin-top:14px"><button class="btn" data-skinscan="1">📸 Selfie se scan karo</button>'+(S.scans.length>1?'<button class="btn ghost small" data-ask="Meri saari skin scans compare karo: kya improve hua, kya bigda, aur routine me kya badlav karu.">Progress compare</button>':'')+'</div></div>'
+
+   +'<div class="card"><div class="h-cardh"><h3>🧴 Meri routine</h3><span>'+(R?esc(niceDate(R.date)):'')+'</span></div>'
+   +(R?'<p class="h-wo-meta" style="margin-bottom:10px"><b style="color:var(--text)">'+esc(R.title)+'</b></p><h4 class="sk-h">☀️ Subah (AM)</h4>'+stepList(R.am)+'<h4 class="sk-h">🌙 Raat (PM)</h4>'+stepList(R.pm)+(R.weekly.length?'<h4 class="sk-h">📅 Hafte me</h4>'+stepList(R.weekly):'')+(R.notes?'<p class="muted small">'+esc(R.notes)+'</p>':'')
+      :'<p class="muted small">Abhi routine nahi hai. Coach aapki skin type, problems aur budget ke hisaab se AM/PM routine banayega (India me milne wale products ke saath).</p>')
+   +'<div class="row" style="margin-top:14px"><button class="btn'+(R?' ghost':'')+'" data-ask="Meri skin profile, scan aur budget ke hisaab se meri AM aur PM skin care routine banao (har step: kya lagana, India me milne wala example product, kaise lagana) aur save_skin_routine se save karo. Gym/sweat ka bhi dhyan rakhna.">'+(R?'↻ Routine update':'✨ AI se meri routine banao')+'</button><button class="btn ghost small" data-skinprod="1">🔍 Product check</button></div></div>'
+   +'</div>'
+
+   +'<div class="card"><div class="h-cardh"><h3>👤 Skin profile</h3><span>Coach isi se salah dega</span></div><div class="form">'
+   +'<div><label>Skin type</label><select id="skType">'+['','oily','dry','combination','normal','sensitive'].map(v=>'<option value="'+v+'"'+(P.type===v?' selected':'')+'>'+(v||'Pata nahi')+'</option>').join('')+'</select></div>'
+   +'<div><label>Sensitivity</label><select id="skSens">'+['','low','medium','high'].map(v=>'<option value="'+v+'"'+(P.sensitivity===v?' selected':'')+'>'+(v||'-')+'</option>').join('')+'</select></div>'
+   +'<div><label>Budget (mahina)</label><select id="skBudget">'+['','₹500 se kam','₹500-1500','₹1500+'].map(v=>'<option value="'+v+'"'+(P.budget===v?' selected':'')+'>'+(v||'-')+'</option>').join('')+'</select></div>'
+   +'<div class="full"><label>Problems (tap karo)</label><div class="sk-concerns">'+SKIN_CONCERNS.map(c=>'<button type="button" class="'+((P.concerns||[]).indexOf(c)>=0?'on':'')+'" data-sconcern="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div></div>'
+   +'<div class="full"><label>Abhi kya use karte ho</label><input id="skProducts" value="'+esc(P.products||'')+'" placeholder="Jaise: Himalaya neem face wash, koi sunscreen nahi"></div>'
+   +'</div><div class="row" style="margin-top:14px"><button class="btn" data-skinsave="1">Save karo</button></div></div>'
+
+   +'<div class="card"><div class="h-cardh"><h3>💡 Gym walo ke skin rules</h3></div><ul class="sk-tips">'
+   +'<li>Workout ke 15-30 min me face wash, warna sweat se pimples.</li><li>Sunscreen roz, ghar ke andar bhi (SPF 50, 2 ungli jitna).</li><li>Whey se acne badhe to whey isolate ya plant protein try karo.</li><li>Towel, cap aur pillow cover hafte me 2 baar dho.</li><li>Steroid wali "fairness" creams kabhi nahi (Betnovate, Panderm jaisi).</li></ul></div>';
+}
+function skinProdAsk(){ showTab('coach'); const t=$('#chatIn'); t.value='Ye product meri skin ke liye theek hai? Naam ya ingredients: '; setTimeout(()=>{ t.focus(); t.setSelectionRange(t.value.length,t.value.length); },80); }
+document.addEventListener('click',e=>{
+  const sk=e.target.closest('[data-skin]');
+  if(sk){ const S=skinState(), k=sk.dataset.skin, x=S.days[today()]=S.days[today()]||{}; x[k]=!x[k]; haptic(); save(); renderSkin(); if($('#home').classList.contains('on')) renderHome();
+    if(x.am&&x.pm) toast('✨ Aaj ki skin routine poori! Streak '+skinStreak()+' din'); return; }
+  if(e.target.closest('[data-skinscan]')){ $('#skinIn').click(); return; }
+  if(e.target.closest('[data-skinprod]')){ skinProdAsk(); return; }
+  const sc=e.target.closest('[data-sconcern]');
+  if(sc){ const P=skinState().profile, c=sc.dataset.sconcern; P.concerns=P.concerns||[]; const i=P.concerns.indexOf(c); if(i>=0) P.concerns.splice(i,1); else P.concerns.push(c); sc.classList.toggle('on'); save(); return; }
+  if(e.target.closest('[data-skinsave]')){ const P=skinState().profile; P.type=$('#skType').value; P.sensitivity=$('#skSens').value; P.budget=$('#skBudget').value; P.products=$('#skProducts').value.trim(); save(); renderSkin(); toast('✨ Skin profile save'); return; }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id!=='skinIn') return;
+  const f=e.target.files&&e.target.files[0]; e.target.value=''; if(!f) return;
+  if(!/^image\//.test(f.type)){ toast('Selfie photo chuno'); return; }
+  if(!aiKey()){ toast('Pehle Profile me AI key daalo'); return; }
+  const r=new FileReader();
+  r.onload=()=>{ const im=new Image();
+    im.onload=()=>{ const full=shrinkImg(im,1280,0.85); pendingImg={mime:'image/jpeg',data:full.split(',')[1],thumb:shrinkImg(im,150,0.6)}; showTab('coach');
+      sendChat('Ye meri face ki selfie hai, mera AI SKIN SCAN karo. Skin type, har concern (acne, pigmentation, oiliness, dryness, texture/pores, dark circles, redness) ki severity 0-10, aur overall skin health 0-10 do. Pichle scan se compare karo agar hai. save_skin_scan se save karo, update_skin_profile se type/concerns update karo, phir meri top 3 problems aur unka simple AM/PM fix batao (India ke budget products ke saath).'); };
+    im.onerror=()=>toast('Ye photo khul nahi payi');
+    im.src=r.result; };
+  r.readAsDataURL(f);
+});
 
 /* ---------- render: log ---------- */
 function renderLog(){
@@ -2439,7 +2635,7 @@ function renderBadge(){
   $('#weekBadge').title='Is hafte ke workouts';
   $('#brandSub').textContent='Natural bulk · '+(num(state.profile.goal)||90)+' kg mission';
 }
-function renderData(){renderBadge();renderHome();renderLog();renderProgress();renderPlan();renderProfile();}
+function renderData(){renderBadge();renderHome();renderLog();renderProgress();renderPlan();renderProfile();renderSkin();}
 
 /* ---------- render: home ---------- */
 const DAY_SHORT=['Ra','So','Ma','Bu','Gu','Shu','Sha'];
@@ -2542,6 +2738,7 @@ function renderHome(){
    +'<div class="meter"><div class="top">Roz ka log<span>'+c.logged+' / '+c.day+'</span></div><div class="bar g"><i style="width:'+Math.max(2,Math.min(100,Math.round(c.logged/Math.max(1,c.day)*100)))+'%"></i></div></div></div>'
    +'</div></div>'
 
+   +skinHomeHtml()
    +'<div class="card"><div class="h-cardh"><h3>💧 Paani</h3><span>'+wDone+' / '+wGoal+' glass · '+(wDone*0.25).toFixed(1)+' L</span></div>'
    +'<div class="h-water"><div class="cups" style="--n:'+wGoal+'">'+cups+'</div><button class="h-wbtn" data-water="'+Math.min(30,wDone+1)+'" title="1 glass add">+</button></div>'
    +'<div class="h-supps">'+(sup.length?sup.map(s=>{ const on=have.indexOf(s.toLowerCase())>=0; return '<button class="'+(on?'on':'')+'" data-supp="'+esc(s)+'">'+(on?'✓':'○')+' '+esc(s)+'</button>'; }).join(''):'<span class="muted small">Profile me apne supplements likho.</span>')+'</div></div>';
@@ -2670,6 +2867,7 @@ function showTab(id){
   if(id==='home') renderHome();
   if(id==='progress') renderProgress();
   if(id==='plan') renderPlan();
+  if(id==='skin') renderSkin();
   if(id==='profile') loadRemStatus();
   if(id==='progress'&&!photosLoaded){ photosLoaded=true; loadPhotos(); }
   window.scrollTo(0,0);
@@ -3289,6 +3487,9 @@ $('#sheet').addEventListener('click',e=>{
   else if(a==='log') showTab('log');
   else if(a==='food'){ showTab('log'); fillLogForm(today()); setTimeout(()=>{ const fc=$('#foodCard'); if(fc) fc.scrollIntoView({behavior:'smooth',block:'start'}); },120); }
   else if(a==='ask'){ showTab('coach'); setTimeout(()=>$('#chatIn').focus(),120); }
+  else if(a==='skin') showTab('skin');
+  else if(a==='skinscan') $('#skinIn').click();
+  else if(a==='skinprod') skinProdAsk();
   else if(a==='review'){ showTab('coach'); sendChat('Mere pichle logs dekh ke mera weekly review karo: weight trend, consistency, protein/calories, neend. Kya achha hai, kya galat, aur agle hafte ke 3 seedhe action points.'); }
 });
 $('#workChips').addEventListener('click',e=>{ const b=e.target.closest('[data-work]'); if(!b) return; $('#lWork').value=b.dataset.work; renderWorkChips(); haptic(); });
