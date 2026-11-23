@@ -759,6 +759,11 @@ input,select,textarea{border-radius:12px;background:var(--card2);border-color:va
 .h-sugg button{flex:0 0 auto;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card2);font:550 13.5px/1 var(--font);color:var(--text);cursor:pointer;white-space:nowrap}
 .h-sugg button:hover{border-color:var(--accent)}
 .h-chal .meter:first-of-type{margin-top:0}
+.h-brief{border-color:rgba(var(--acc-rgb),.35);background:linear-gradient(160deg,rgba(var(--acc-rgb),.10),transparent 55%),var(--surface)}
+.h-brief-body ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.h-brief-body li{font:500 14.5px/1.5 var(--font)}
+.h-brief-body p{margin:4px 0}
+.h-brief .btn[disabled]{opacity:.6}
 </style>
 </head>
 <body data-tab="home">
@@ -1263,7 +1268,9 @@ function normalize(s){
     threads:(s.threads&&typeof s.threads==='object')?s.threads:{},
     activeThread:s.activeThread||'main',
     threadNames:(s.threadNames&&typeof s.threadNames==='object')?s.threadNames:{main:'Fitness'},
-    trash:(s.trash&&typeof s.trash==='object')?s.trash:{}
+    trash:(s.trash&&typeof s.trash==='object')?s.trash:{},
+    brief:(s.brief&&typeof s.brief==='object')?s.brief:{},
+    chatSummary:(s.chatSummary&&typeof s.chatSummary==='object')?s.chatSummary:{}
   };
 }
 function load(){
@@ -1579,6 +1586,7 @@ APP KE TOOLS (bahut zaroori)
 - Ek message me kai cheezein hon to saare tools ek saath chalao.
 - Tool ke baad 1 line me batao kya save kiya, phir coach wali salah do (jaise aaj ke log pe chhota feedback).
 - Sirf sawaal ho to tool mat chalao.
+- AGLE SAWAAL: har jawab ki bilkul AAKHRI line me ye likho: [[next: sawaal 1 | sawaal 2 | sawaal 3]] — user ke agle 2-3 natural sawaal ya kaam, user ki taraf se (jaise "Mera diet plan bana do"), har ek 2-7 shabd. App inke buttons banata hai, isliye ye line jawab me kahin aur mat likho aur iske baad kuch mat likho.
 
 SAFETY (zaroori)
 - Steroids, SARMs, prohormones, insulin, ya koi bhi PED kabhi suggest mat karo, unki dose ya cycle mat batao. Agar user pooche to unke health risks seedhe samjhao aur natural tareeka batao.
@@ -1605,6 +1613,7 @@ ABHI KI STATUS (aaj ${today()})
 COACH ANALYTICS (app ne tumhare liye data se nikaala, isko use karo)
 ${coachAnalytics()}
 
+${(state.chatSummary&&state.chatSummary[state.activeThread||'main']&&state.chatSummary[state.activeThread||'main'].text)?'IS CHAT KI PURANI BAATCHEET KA SAAR\n'+state.chatSummary[state.activeThread||'main'].text+'\n':''}
 YAAD RAKHI BAATEIN
 ${mem}
 
@@ -1988,7 +1997,7 @@ let statusFn=null;
 function isBusy(status,msg){return status===503||status===500||status===429||/high demand|overloaded|unavailable|try again later|quota|exhausted|rate limit/i.test(msg||'');}
 function toContents(messages){
   return messages.map(m=>{
-    let t=m.text||'';
+    let t=m.role==='user'?(m.text||''):splitNext(m.text||'').text;
     if(m.role!=='user' && m.actions && m.actions.length) t+='\n\n[App me kiya: '+m.actions.join('; ')+']';
     if(m.role==='user' && m.thumb) t+='\n[User ne photo bheji]';
     return {role:m.role==='user'?'user':'model',parts:[{text:t||'...'}]};
@@ -2182,10 +2191,11 @@ function renderChat(){
   }else{
     box.innerHTML=state.chat.map((m,i)=>m.role==='user'
       ?'<div class="msg user">'+(m.thumb?'<img class="cimg" src="'+esc(m.thumb)+'" alt="photo">':'')+esc(m.text)+'</div>'
-      :'<div class="msg model">'+md(m.text)+actionsHtml(m.actions)+sourcesHtml(m.sources)+'<button class="speak" data-speak="'+i+'" title="Bol ke sunao">🔊</button></div>').join('');
+      :'<div class="msg model">'+md(splitNext(m.text).text)+actionsHtml(m.actions)+sourcesHtml(m.sources)+'<button class="speak" data-speak="'+i+'" title="Bol ke sunao">🔊</button></div>').join('');
   }
   box.scrollTop=box.scrollHeight;
-  $('#chips').innerHTML=CHIPS.map(c=>'<button class="chip">'+esc(c)+'</button>').join('');
+  const lastM=state.chat[state.chat.length-1], nx=(lastM&&lastM.role!=='user')?splitNext(lastM.text).next:[];
+  $('#chips').innerHTML=(nx.length?nx.map(c=>'<button class="chip on">'+esc(c)+'</button>').join(''):'')+CHIPS.slice(0,nx.length?2:CHIPS.length).map(c=>'<button class="chip">'+esc(c)+'</button>').join('');
   $('#modelInfo').textContent=aiKey()?('Online · 🌐 Google Search · 📷 Photo · '+(state.settings.model||'auto')):'AI band hai · Profile me API key daalo';
   $('#noKeyBanner').innerHTML=aiKey()?'':'<div class="banner">🔑 Coach se baat karne ke liye ek <b>free Gemini API key</b> chahiye. <a href="#" id="goProfile" style="color:var(--accent);font-weight:700">Profile me jaake daalo →</a><br><span class="small muted">Tab tak Log, Progress aur Plan bina AI ke bhi kaam karte hain.</span></div>';
   const gp=$('#goProfile'); if(gp) gp.onclick=e=>{e.preventDefault();showTab('profile');};
@@ -2211,7 +2221,7 @@ async function sendChat(text){
   let live=null, latest='', pending=false; const acts=[];
   const paint=()=>{
     if(!live){ live=document.createElement('div'); live.className='msg model'; box.insertBefore(live,typing); typing.textContent=''; }
-    if(!pending){ pending=true; requestAnimationFrame(()=>{ pending=false; live.innerHTML=md(latest)+actionsHtml(acts); box.scrollTop=box.scrollHeight; }); }
+    if(!pending){ pending=true; requestAnimationFrame(()=>{ pending=false; live.innerHTML=md(splitNext(latest).text)+actionsHtml(acts); box.scrollTop=box.scrollHeight; }); }
   };
   const onChunk=t=>{ latest=t; paint(); };
   const onAction=s=>{ acts.push(s); paint(); if(/New PR/.test(s)) celebrate(); };
@@ -2219,6 +2229,7 @@ async function sendChat(text){
     const reply=await callGemini(state.chat.slice(-16),onChunk,onAction,img);
     statusFn=null;
     state.chat.push({role:'model',text:reply.text,actions:reply.actions,sources:reply.sources}); save(); renderChat();
+    setTimeout(maybeSummarize,2500);
   }catch(e){
     if(acts.length){ // kaam ho gaya tha, sirf jawab fail hua
       statusFn=null;
@@ -2230,6 +2241,73 @@ async function sendChat(text){
     const err=document.createElement('div'); err.className='msg err'; err.textContent='⚠️ '+(e.message==='NOKEY'?'API key nahi hai.':e.message.indexOf('Failed to fetch')>=0?'Internet check karo, Google se connect nahi ho paya.':e.message);
     $('#chatBox').appendChild(err); $('#chatBox').scrollTop=1e9;
   }finally{busy=false;$('#sendBtn').disabled=false;}
+}
+
+/* ---------- Coach v3: follow-up chips, daily briefing, long-term chat memory ---------- */
+function splitNext(t){
+  t=String(t||'');
+  const m=t.match(/\n?[ \t]*\[\[\s*next\s*:\s*([^\]]*)\]\]\s*$/i);
+  if(!m) return {text:t.replace(/\n?[ \t]*\[\[[^\]]*$/,'').trimEnd(),next:[]};
+  return {text:t.slice(0,m.index).trimEnd(),next:m[1].split('|').map(x=>x.trim()).filter(Boolean).slice(0,3)};
+}
+async function quickAI(prompt){
+  const key=aiKey(); if(!key) throw new Error('NOKEY');
+  await ensureModel(key,false);
+  const order=[state.settings.model].concat((state.settings.models||[]).filter(m=>m!==state.settings.model)).slice(0,3);
+  let last=null;
+  for(const model of order){
+    try{
+      const gen={temperature:0.6}; if(!noThink[model]) gen.thinkingConfig={thinkingLevel:'low'};
+      const r=await apiFetch(API+'/models/'+encodeURIComponent(model)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},
+        body:JSON.stringify({systemInstruction:{parts:[{text:systemPrompt()}]},contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:gen})});
+      let d={}; try{d=await r.json();}catch(e){}
+      if(Array.isArray(d)) d=d[0]||{};
+      if(!r.ok){ const m=(d.error&&d.error.message)||('HTTP '+r.status); if(r.status===400&&/thinking/i.test(m)) noThink[model]=true; last=new Error(m); continue; }
+      const c=d.candidates&&d.candidates[0];
+      const t=c&&c.content&&c.content.parts?c.content.parts.filter(p=>p.text&&!p.thought).map(p=>p.text).join(''):'';
+      if(t) return splitNext(t).text.trim();
+    }catch(e){ last=e; }
+  }
+  throw last||new Error('AI jawab nahi aaya');
+}
+let briefBusy=false;
+function briefHtml(){
+  if(!aiKey()) return '';
+  const b=state.brief||{}, fresh=b.date===today()&&b.text;
+  return '<div class="card h-brief"><div class="h-cardh"><h3>🧠 Coach ka aaj ka plan</h3><button class="btn ghost small" data-brief="1"'+(briefBusy?' disabled':'')+'>'+(briefBusy?'Soch raha hai…':'↻ Naya')+'</button></div>'
+    +(fresh?'<div class="h-brief-body">'+md(b.text)+'</div>'
+      :'<p class="muted small" style="margin:0">'+(b.failAt&&!briefBusy?'Abhi plan nahi ban paya (AI busy). ↻ dabake dobara try karo.':'Coach aapka data dekh ke aaj ka plan likh raha hai…')+'</p>')
+    +'<div class="row" style="margin-top:12px"><button class="btn ghost small" data-ask="Aaj ke briefing ko detail me samjhao: aaj exactly kya karu, kya khaun, aur kyun.">Detail me samjhao</button></div></div>';
+}
+async function loadBrief(force){
+  if(briefBusy||!aiKey()) return;
+  const b=state.brief||{};
+  if(!force&&b.date===today()&&b.text) return;
+  if(!force&&b.failAt&&Date.now()-b.failAt<10*60000) return;
+  briefBusy=true; if($('#home').classList.contains('on')) renderHome();
+  try{
+    const txt=await quickAI('Mera AAJ ka briefing do (Home screen card ke liye). COACH ANALYTICS, aaj ka data aur plan dekh ke 3-4 bullet points, har ek ek line, total 70 shabd se kam:\n1) Aaj ka sabse zaroori kaam (workout ka naam ya rest, aur kya focus karna hai)\n2) Khana/protein ka specific number ya fix\n3) Data se nikla 1 insight ya warning (numbers ke saath)\n4) 1 chhoti motivation line\nKoi heading, intro ya [[next]] line nahi. Sirf "- " wale bullets.');
+    state.brief={date:today(),text:txt};
+  }catch(e){ state.brief=Object.assign({},state.brief||{},{failAt:Date.now()}); }
+  briefBusy=false; save();
+  if($('#home').classList.contains('on')) renderHome();
+}
+document.addEventListener('click',e=>{ if(e.target.closest('[data-brief]')){ loadBrief(true); } });
+let sumBusy=false;
+async function maybeSummarize(){
+  if(sumBusy||!aiKey()) return;
+  const th=state.activeThread||'main'; state.chatSummary=state.chatSummary||{};
+  const S=state.chatSummary[th]||{text:'',last:''}, msgs=state.chat;
+  if(msgs.length<24) return;
+  let start=0; if(S.last){ const i=msgs.findIndex(m=>m.text===S.last); start=i>=0?i+1:0; }
+  const end=msgs.length-16; if(end-start<8) return;
+  sumBusy=true;
+  try{
+    const chunk=msgs.slice(start,end).map(m=>(m.role==='user'?'User: ':'Coach: ')+splitNext(m.text).text.slice(0,600)).join('\n');
+    const t=await quickAI('Neeche is chat ki purani baatcheet hai jo ab yaad se nikal jayegi. Ise PEHLE KE SAAR ke saath milake ek naya chhota SAAR banao (max 130 shabd, "- " bullets): user ke faisle, banaye ya maane gaye plans, problems/dard, pasand-napasand, numbers jo aage kaam aayenge. Faltu baatein chhod do. Sirf bullets likho.\n\nPEHLE KA SAAR:\n'+(S.text||'koi nahi')+'\n\nPURANI BAATCHEET:\n'+chunk);
+    state.chatSummary[th]={text:t.slice(0,1500),last:msgs[end-1].text}; save();
+  }catch(e){}
+  sumBusy=false;
 }
 
 /* ---------- render: log ---------- */
@@ -2413,6 +2491,7 @@ function renderHome(){
    +'<div style="--dot:var(--c-water)"><span>Paani</span><b>'+(wDone*0.25).toFixed(1)+'<small>/ '+waterL+' L</small></b></div>'
    +'</div></div></div>'
 
+   +briefHtml()
    +'<form class="h-ask" data-askform autocomplete="off"><div class="av">'+svgI('bolt')+'</div><input name="q" placeholder="Coach se kuch bhi poocho…"><button class="send" type="submit" title="Poocho">'+svgI('send')+'</button></form>'
    +'<div class="h-sugg">'
    +'<button data-ask="Aaj mujhe kya khana chahiye? Mere bache hue protein aur calories ke hisaab se simple Indian meal batao.">🍛 Aaj kya khaun?</button>'
@@ -2449,6 +2528,7 @@ function renderHome(){
    +'<div class="h-water"><div class="cups" style="--n:'+wGoal+'">'+cups+'</div><button class="h-wbtn" data-water="'+Math.min(30,wDone+1)+'" title="1 glass add">+</button></div>'
    +'<div class="h-supps">'+(sup.length?sup.map(s=>{ const on=have.indexOf(s.toLowerCase())>=0; return '<button class="'+(on?'on':'')+'" data-supp="'+esc(s)+'">'+(on?'✓':'○')+' '+esc(s)+'</button>'; }).join(''):'<span class="muted small">Profile me apne supplements likho.</span>')+'</div></div>';
   if($('#home').classList.contains('on')) countUps(out);
+  if($('#home').classList.contains('on')&&!briefBusy) setTimeout(()=>loadBrief(false),900);
 }
 function renderAll(){renderData();renderChat();}
 
@@ -3090,7 +3170,7 @@ async function makeShareCard(){
 
 /* ---- v12 click / input handlers ---- */
 document.addEventListener('click',async e=>{
-  const sp=e.target.closest('[data-speak]'); if(sp){ const m=state.chat[+sp.dataset.speak]; if(m) speakText(m.text,sp); return; }
+  const sp=e.target.closest('[data-speak]'); if(sp){ const m=state.chat[+sp.dataset.speak]; if(m) speakText(splitNext(m.text).text,sp); return; }
   const th=e.target.closest('[data-thread]'); if(th){ switchThread(th.dataset.thread); return; }
   if(e.target.closest('[data-delthread]')){ if(!busy) deleteThread(); return; }
   if(e.target.closest('[data-renthread]')){ renameThread(); return; }
